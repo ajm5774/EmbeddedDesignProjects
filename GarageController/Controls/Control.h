@@ -8,5 +8,13 @@
 #ifndef CONTROL_H_
 #define CONTROL_H_
 
+class Control
+{
+	StateContext context;
+
+public:
+	Control(StateContext context);
+	void run();
+};
 
 #endif /* CONTROL_H_ */

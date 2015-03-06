@@ -8,5 +8,8 @@
 #ifndef DOORSTOP_H_
 #define DOORSTOP_H_
 
+class DoorStop: public State
+{
+};
 
 #endif /* DOORSTOP_H_ */

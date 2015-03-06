@@ -8,5 +8,8 @@
 #ifndef OVERCURRENTCONTROL_H_
 #define OVERCURRENTCONTROL_H_
 
+class OverCurrentControl: public Control
+{
+};
 
 #endif /* OVERCURRENTCONTROL_H_ */

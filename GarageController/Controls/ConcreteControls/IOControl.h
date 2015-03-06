@@ -8,5 +8,8 @@
 #ifndef IOCONTROL_H_
 #define IOCONTROL_H_
 
+class IOControl: public Control
+{
+};
 
 #endif /* IOCONTROL_H_ */
