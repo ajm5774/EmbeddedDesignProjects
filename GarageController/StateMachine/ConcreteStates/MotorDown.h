@@ -8,5 +8,8 @@
 #ifndef MOTORDOWN_H_
 #define MOTORDOWN_H_
 
+class MotorDown: public State
+{
+};
 
 #endif /* MOTORDOWN_H_ */

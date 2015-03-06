@@ -9,6 +9,13 @@
 #define STATEEVENTS_H_
 
 
-//enum class StateEvent { RemotePressed, BeamInterrupt, MotorOvercurrent, DoorClose, DoorOpen };
+enum StateEvent
+{
+	RemotePressed,
+	BeamInterrupt,
+	MotorOvercurrent,
+	DoorClose,
+	DoorOpen
+};
 
 #endif /* STATEEVENTS_H_ */

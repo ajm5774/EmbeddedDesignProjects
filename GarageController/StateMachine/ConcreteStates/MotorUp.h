@@ -8,5 +8,8 @@
 #ifndef MOTORUP_H_
 #define MOTORUP_H_
 
+class MotorUp: public State
+{
+};
 
 #endif /* MOTORUP_H_ */
