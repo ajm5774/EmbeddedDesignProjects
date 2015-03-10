@@ -8,7 +8,7 @@ static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 ConcurrentQueue:: ConcurrentQueue(){}
 
-void  ConcurrentQueue::enqueue(QueueItem * qItem)
+void ConcurrentQueue::enqueue(QueueItem * qItem)
 {
 	pthread_mutex_lock(&mutex);
 	if (count == 0)

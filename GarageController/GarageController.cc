@@ -1,7 +1,16 @@
 #include <cstdlib>
 #include <iostream>
+#include "ConcurrentQueue.h"
+#include "StateEvents.h"
 
 int main(int argc, char *argv[]) {
-	std::cout << "Welcome to the QNX Momentics IDE" << std::endl;
-	return EXIT_SUCCESS;
+	ConcurrentQueue q;
+	QueueItem * item(RemotePressed);
+	QueueItem * item2(BeamInterrupt);
+
+	q.enqueue(item);
+	q.enqueue(item2);
+
+	QueueItem * poppedItem = q.dequeue();
+	printf(poppedItem);
 }

@@ -12,7 +12,8 @@ template <class T>
 class QueueItem
 {
 public:
-	T * item;
+	QueueItem(T* value);
+	T * value;
 	T * behind;
 };
 
