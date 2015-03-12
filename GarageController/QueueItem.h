@@ -8,13 +8,14 @@
 #ifndef QUEUEITEM_H_
 #define QUEUEITEM_H_
 
-template <class T>
+#include "StateEvents.h"
+
 class QueueItem
 {
 public:
-	QueueItem(T* value);
-	T * value;
-	T * behind;
+	QueueItem(StateEvent event);
+	StateEvent event;
+	QueueItem * behind;
 };
 
 #endif /* QUEUEITEM_H_ */

@@ -6,7 +6,7 @@
 
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-ConcurrentQueue:: ConcurrentQueue(){}
+ConcurrentQueue:: ConcurrentQueue(){count = 0;}
 
 void ConcurrentQueue::enqueue(QueueItem * qItem)
 {
@@ -45,5 +45,5 @@ QueueItem * ConcurrentQueue::dequeue()
 	}
 	count--;
 	pthread_mutex_unlock(&mutex);
-	return cust;
+	return qItem;
 }
