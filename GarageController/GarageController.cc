@@ -1,8 +1,12 @@
 #include <cstdlib>
 #include <stdio.h>
+#include <pthread.h>
 #include "ConcurrentQueue.h"
 #include "QueueItem.h"
 #include "StateEvents.h"
+
+pthread_t controlThreads[4];
+pthread_t stateThread;
 
 int main(int argc, char *argv[]) {
 	ConcurrentQueue q;
@@ -18,3 +22,4 @@ int main(int argc, char *argv[]) {
 	QueueItem * poppedItem = q.dequeue();
 	printf("%d\n", q.count);
 }
+

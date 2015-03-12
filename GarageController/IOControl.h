@@ -18,8 +18,8 @@ class IOControl: public Control
 public:
 	IOControl(StateContext context);
 	void run();
-private:
-	int getChar();
 };
+
+int getChar();
 
 #endif /* IOCONTROL_H_ */
