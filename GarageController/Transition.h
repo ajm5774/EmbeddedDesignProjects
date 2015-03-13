@@ -12,11 +12,14 @@
 
 class Transition
 {
+
+public:
+
 	State * nextState;
 	State * currentState;
 	StateEvent triggerEvent;
 
-public:
+
 	Transition(State * currState, State * nextState, StateEvent trigEvent);
 	bool guard();
 	void addGuard(bool (*f)());
