@@ -16,6 +16,7 @@ Transition::Transition(State * cState, State *nState, StateEvent sEvent)
 
 bool Transition::guard()
 {
+
 	return true;
 }
 

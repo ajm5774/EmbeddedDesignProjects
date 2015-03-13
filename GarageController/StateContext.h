@@ -12,6 +12,14 @@
 #include "StateEvents.h"
 #include <map>
 #include "Transition.h"
+#include "ConcurrentQueue.h"
+#include "QueueItem.h"
+#include "DoorClose.h"
+#include "DoorOpen.h"
+#include "DoorStop.h"
+#include "MotorUp.h"
+#include "MotorDown.h"
+
 
 class StateContext
 {
@@ -19,13 +27,20 @@ class StateContext
 	State * previousState;
 	std::map<State, Transition> stateTransitions;
 
+	// creating the states
+	DoorOpen dooropen;
+	DoorClose doorclose;
+	DoorStop doorstop;
+	MotorUp motorup;
+	MotorDown motordown;
+
 public:
 	StateContext();
 	void queueEvent(StateEvent event);
 
 private:
+	ConcurrentQueue queue;
 	void accept(StateEvent event);
 };
-
 
 #endif /* STATECONTEXT_H_ */
