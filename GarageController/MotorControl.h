@@ -8,10 +8,13 @@
 #ifndef MOTORCONTROL_H_
 #define MOTORCONTROL_H_
 
+#include "Control.h"
+
 class MotorControl: public Control
 {
-	bool motorUp = false;
-	bool motorDown = false;
+public:
+	bool motorUp;
+	bool motorDown;
 
 private:
 	void doorClose();

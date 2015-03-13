@@ -18,18 +18,21 @@ void IOControl::run()
 	char ch;
 	while(true)
 	{
-		cin >> ch;
+		ch = getchar();
 
 		switch(ch)
 		{
 			case 'm':
-				context.queueEvent(new QueueItem(MotorOvercurrent));
+				//context.queueEvent(new QueueItem(MotorOvercurrent));
+				cout << "m";
 				break;
 			case 'i':
-				context.queueEvent(new QueueItem(BeamInterrupt));
+				//context.queueEvent(new QueueItem(BeamInterrupt));
+				cout << "i";
 				break;
 			case 'r':
-				context.queueEvent(new QueueItem(RemotePressed));
+				//context.queueEvent(new QueueItem(RemotePressed));
+				cout << "r";
 				break;
 		}
 	}
