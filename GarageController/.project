@@ -3,6 +3,7 @@
 	<name>GarageController</name>
 	<comment></comment>
 	<projects>
+		<project>purplebox8</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

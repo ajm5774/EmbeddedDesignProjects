@@ -10,6 +10,12 @@
 
 class OverCurrentControl: public Control
 {
+public:
+	StateContext context;
+	OverCurrentControl();
+	OverCurrentControl(StateContext context);
+	void run();
+	void setContext(StateContext context);
 };
 
 #endif /* OVERCURRENTCONTROL_H_ */

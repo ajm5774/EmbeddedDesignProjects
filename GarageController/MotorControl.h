@@ -12,11 +12,18 @@
 
 class MotorControl: public Control
 {
+	static bool motorUp;
+	static bool motorDown;
+
 public:
-	bool motorUp;
-	bool motorDown;
+	StateContext context;
+	MotorControl();
+	MotorControl(StateContext context);
+	void run();
+	void setContext(StateContext context);
 
 private:
+
 	void doorClose();
 	void doorOpen();
 };

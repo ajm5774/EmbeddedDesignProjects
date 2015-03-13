@@ -13,15 +13,11 @@
 
 class Control
 {
-	StateContext context;
-
 public:
+	StateContext context;
+	Control();
 	Control(StateContext context);
-	void start();
-
-private:
-	pthread_t thread;
-	void * run(void * v);
+	void run();
 };
 
 #endif /* CONTROL_H_ */

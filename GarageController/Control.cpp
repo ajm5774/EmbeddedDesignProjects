@@ -11,9 +11,8 @@ Control::Control(StateContext aContext)
 	context = aContext;
 }
 
-void * Control::run(void *)
+void Control::run()
 {
-	return NULL;
 }
 
 
