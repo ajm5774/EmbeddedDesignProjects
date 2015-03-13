@@ -20,6 +20,7 @@ class StateContext
 	std::map<State, Transition[]> stateTransitions;
 
 public:
+	StateContext();
 	void queueEvent(StateEvent event);
 
 private:
