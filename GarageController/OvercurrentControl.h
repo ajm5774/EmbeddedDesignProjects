@@ -8,14 +8,15 @@
 #ifndef OVERCURRENTCONTROL_H_
 #define OVERCURRENTCONTROL_H_
 
+#include "Control.h"
+
 class OverCurrentControl: public Control
 {
 public:
 	StateContext context;
 	OverCurrentControl();
 	OverCurrentControl(StateContext context);
-	void run();
-	void setContext(StateContext context);
+	virtual void run();
 };
 
 #endif /* OVERCURRENTCONTROL_H_ */

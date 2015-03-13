@@ -17,7 +17,7 @@ public:
 	StateContext context;
 	IOControl();
 	IOControl(StateContext context);
-	void run();
+	virtual void run();
 };
 
 int getChar();

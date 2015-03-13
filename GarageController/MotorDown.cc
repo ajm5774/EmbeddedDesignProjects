@@ -17,14 +17,16 @@ MotorDown::MotorDown()
 
 void MotorDown::entryAction()
 {
-	motorDown = true;
-	beamOn = true;
+	MotorControl::motorUp = false;
+	MotorControl::motorDown = true;
+	BeamControl::beamOn = true;
 }
 
 void MotorDown::exitAction()
 {
-	beamOn = false;
-	motorDown = false;
+	BeamControl::beamOn = false;
+	MotorControl::motorDown = false;
+	MotorControl::motorUp = false;
 }
 
 

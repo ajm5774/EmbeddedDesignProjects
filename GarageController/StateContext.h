@@ -17,7 +17,7 @@ class StateContext
 {
 	State * currentState;
 	State * previousState;
-	std::map<State, Transition[]> stateTransitions;
+	std::map<State, Transition> stateTransitions;
 
 public:
 	StateContext();
@@ -26,5 +26,6 @@ public:
 private:
 	void accept(StateEvent event);
 };
+
 
 #endif /* STATECONTEXT_H_ */

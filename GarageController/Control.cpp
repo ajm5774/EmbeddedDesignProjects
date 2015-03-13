@@ -5,6 +5,12 @@
  *      Author: ajm5774
  */
 #include "Control.h"
+#include <stdio.h>
+
+Control::Control(){
+
+	printf("Control made");
+}
 
 Control::Control(StateContext aContext)
 {
@@ -13,6 +19,7 @@ Control::Control(StateContext aContext)
 
 void Control::run()
 {
+	printf("Control made");
 }
 
 

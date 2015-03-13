@@ -15,7 +15,7 @@
 StateContext::StateContext()
 {
 	// creating the states
-	DoorOpen dooropen;
+	/*DoorOpen dooropen;
 	DoorClose doorclose;
 	DoorStop doorstop;
 	MotorUp motorup;
@@ -45,7 +45,7 @@ StateContext::StateContext()
 	// need addguard to check previous state
 
 	// add the states and transition to map
-	//stateTransitions.insert();
+	//stateTransitions.insert();*/
 }
 
 void StateContext::queueEvent(StateEvent event)

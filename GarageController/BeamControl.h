@@ -8,16 +8,16 @@
 #ifndef BEAMCONTROL_H_
 #define BEAMCONTROL_H_
 
+#include "Control.h"
+#include "StateContext.h"
+
 class BeamControl: public Control
 {
-	static bool beamOn;
-
 public:
+	static bool beamOn;
 	StateContext context;
-	BeamControl();
 	BeamControl(StateContext context);
-	void run();
-	void setContext(StateContext context);
+	virtual void run();
 };
 
 #endif /* BEAMCONTROL_H_ */

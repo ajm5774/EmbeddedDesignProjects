@@ -9,21 +9,18 @@
 #define MOTORCONTROL_H_
 
 #include "Control.h"
+#include "StateContext.h"
 
 class MotorControl: public Control
 {
+public:
 	static bool motorUp;
 	static bool motorDown;
-
-public:
 	StateContext context;
-	MotorControl();
 	MotorControl(StateContext context);
-	void run();
-	void setContext(StateContext context);
+	virtual void run();
 
 private:
-
 	void doorClose();
 	void doorOpen();
 };

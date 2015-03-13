@@ -12,11 +12,13 @@
 #include "StateContext.h"
 
 pthread_t * threads[4];
-StateContext  context;
+StateContext context;
 
 static void * controlWrapper(void * context)
 {
-	((Control *)context)->run();
+	Control * c = (Control *)context;
+	c->run();
+	printf("what just happened");
 }
 
 
@@ -24,8 +26,8 @@ void startControlThreads()
 {
 	int i;
 	int numControls = 1;
-	Control controls[numControls];
-	controls[0] = IOControl(context);
+	Control controls[] = {IOControl(context)};
+	//controls[0] = IOControl(context);
 	//controls[1] = MotorControl(context);
 	//controls[2] = OverCurrentControl(context);
 	//controls[3] = BeamControl(context);
@@ -42,7 +44,7 @@ void startControlThreads()
 	// now create the threads and pass along its thread number from the loop counter.
 	for(i =0; i < numControls; i++)
 	{
-		pthread_create( threads[i], &threadAttributes, controlWrapper, &controls[0]);
+		pthread_create( threads[i], &threadAttributes, controlWrapper, (void *)&controls[0]);
 	}
 }
 

@@ -15,12 +15,12 @@ MotorUp::MotorUp()
 
 void MotorUp::entryAction()
 {
-	motorUp = true;
+	MotorControl::motorUp = true;
 }
 
 void MotorUp::exitAction()
 {
-	motorUp = false;
+	MotorControl::motorUp = false;
 }
 
 

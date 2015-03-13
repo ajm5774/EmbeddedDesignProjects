@@ -17,7 +17,7 @@ public:
 	StateContext context;
 	Control();
 	Control(StateContext context);
-	void run();
+	virtual void run();
 };
 
 #endif /* CONTROL_H_ */

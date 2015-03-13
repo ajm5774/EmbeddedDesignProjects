@@ -18,6 +18,7 @@ public:
 	void entryAction();
 	void exitAction();
 	void activity();
+	bool operator<(const State& state1) const { return statusId < state1.statusId;}
 };
 
 #endif /* STATE_H_ */

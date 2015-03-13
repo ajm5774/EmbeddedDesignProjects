@@ -8,6 +8,11 @@
 #include <iostream>
 using namespace std;
 
+IOControl::IOControl(): Control()
+{
+	printf("IOControl made");
+}
+
 IOControl::IOControl(StateContext aContext): Control(aContext)
 {
 	context = aContext;
