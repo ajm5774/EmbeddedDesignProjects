@@ -11,11 +11,11 @@
 
 enum StateEvent
 {
-	RemotePressed,
-	BeamInterrupt,
-	MotorOvercurrent,
-	DoorClose,
-	DoorOpen
+	remote_pressed,
+	beam_interrupt,
+	motor_overcurrent,
+	door_close,
+	door_open
 };
 
 #endif /* STATEEVENTS_H_ */
