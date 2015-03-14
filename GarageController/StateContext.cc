@@ -22,7 +22,7 @@ StateContext::StateContext()
 
 	//StateEvent event1 = remote_pressed;
 	// transitions associate with DoorClose state
-	Transition DC_trans1(&doorclose, &motorup, remote_pressed);
+	/*Transition DC_trans1(&doorclose, &motorup, remote_pressed);
 
 	// transitions associate with MotorUp state
 	Transition MU_trans1(&motorup, &dooropen, door_open);
@@ -54,7 +54,7 @@ StateContext::StateContext()
 	stateTransitions.insert(std::make_pair(motordown, MDtrans));
 
 	Transition DStrans[] = {DS_trans1, DS_trans2};
-	stateTransitions.insert(std::make_pair(doorstop, DStrans));
+	stateTransitions.insert(std::make_pair(doorstop, DStrans));*/
 }
 
 /*
@@ -69,7 +69,7 @@ void StateContext::queueEvent(StateEvent event)
 void StateContext::accept(StateEvent event)
 {
 
-	Transition trans[4]= stateTransitions[*currentState];
+	/*Transition trans[4]= stateTransitions[*currentState];
 
 	// loop counter
 	int i = 0;
@@ -89,7 +89,7 @@ void StateContext::accept(StateEvent event)
 				currentState->entryAction();
 			}
 		}
-	}
+	}*/
 
 
 
