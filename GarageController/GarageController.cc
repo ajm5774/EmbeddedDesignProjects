@@ -4,6 +4,7 @@
 #include "ConcurrentQueue.h"
 #include "QueueItem.h"
 #include "StateEvents.h"
+#include "Control.h"
 #include "IOControl.h"
 #include "MotorControl.h"
 #include "OvercurrentControl.h"
@@ -14,35 +15,54 @@ const int numThreads = 4;
 pthread_t * threads[numThreads];
 StateContext context;
 
-typedef struct
+/*typedef struct
 {
-	int controlNum;
+	int * controlNum;
 	StateContext * context;
 } pthreadBundle;
 
 static void * controlWrapper(void * bund)
 {
-	int controlNum = ((pthreadBundle *)bund)->controlNum;
+	int controlNum = *(((pthreadBundle *)bund)->controlNum);
 	StateContext * context = ((pthreadBundle *)bund)->context;
 
 	//this is ugly, but there isn't a better way to do this
-	//since pthread can only pass void * params and control is
-	//a generic type.
+	//Decendants of Control run Control::run due to casting,
+	//pthread requires void * so a cast is necessary...
 	if(controlNum == 0)
 	{
-			IOControl * io = new IOControl(context);
-			io->run();
+		IOControl * io = new IOControl(context);
+		io->run();
 	}
 
 	return NULL;
 }
+*/
+
+typedef struct
+{
+	Control * control;
+} pthreadBundle;
+
+static void * controlWrapper(void * bund)
+{
+	((pthreadBundle *) bund)->control->run();
+	return NULL;
+}
+
 
 void startControlThreads()
 {
+	int i;
+	int numControls = 1;
+	Control * controls[] = {new IOControl(&context)};
+	//controls[0] = IOControl(context);
+	//controls[1] = MotorControl(context);
+	//controls[2] = OverCurrentControl(context);
+	//controls[3] = BeamControl(context);
+
 	pthread_attr_t threadAttributes ;
 	int policy ;
-	int i = 0;;
-	int numControls = 1;
 	struct sched_param parameters ;
 
 	pthread_attr_init(&threadAttributes) ;		// initialize thread attributes structure -- must do before any other activity on this struct
@@ -50,24 +70,28 @@ void startControlThreads()
 	parameters.sched_priority-- ;									// lower the priority
 	pthread_attr_setschedparam(&threadAttributes, &parameters) ;	// set up the pthread_attr struct with the updated priority
 
-	// now create the threads and pass along its thread number from the loop counter
-	pthreadBundle bundle = {i, &context};
-	for(i = 0; i < numControls; i++)
+	// now create the threads and pass along its thread number from the loop counter.
+	pthreadBundle bundle = {NULL};
+	for(i =0; i < numControls; i++)
 	{
-		bundle.controlNum = i;
-		pthread_create( threads[0], &threadAttributes, controlWrapper, (void *)&bundle);
+		bundle.control = controls[i];
+		pthread_create( threads[i], &threadAttributes, controlWrapper, (void *)&bundle);
 	}
+
+
 }
 
 int main(int argc, char *argv[]) {
 	context = StateContext();
+
 	startControlThreads();
 
-	int i;
-	for(i = 0; i < numThreads; i++)
-	{
-		pthread_join(*threads[i], 0);
-	}
+	while(true){}
+
+	pthread_join(*threads[0], 0);
+	pthread_join(*threads[1], 0);
+	pthread_join(*threads[2], 0);
+	pthread_join(*threads[3], 0);
 }
 
 
