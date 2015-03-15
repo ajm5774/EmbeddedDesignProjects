@@ -21,24 +21,27 @@ IOControl::IOControl(StateContext * aContext): Control(aContext)
 void IOControl::run()
 {
 	char ch;
+	cout << "Awaiting character input:\n";
 	while(true)
 	{
-		system ("/bin/stty raw");
+		//system ("/bin/stty raw");
 		ch = getchar();
 
 		switch(ch)
 		{
 			case 'm':
-				//context.queueEvent(new QueueItem(MotorOvercurrent));
 				cout << "m\n";
+				context->queueEvent(motor_overcurrent);
 				break;
 			case 'i':
-				//context.queueEvent(new QueueItem(BeamInterrupt));
 				cout << "i\n";
+				context->queueEvent(beam_interrupt);
 				break;
 			case 'r':
-				//context.queueEvent(new QueueItem(RemotePressed));
 				cout << "r\n";
+				context->queueEvent(remote_pressed);
+				break;
+			case '\n':
 				break;
 			default:
 				cout << "Key not identified\n";

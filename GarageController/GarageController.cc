@@ -23,7 +23,7 @@ using namespace std;
 
 const int numThreads = 4;
 pthread_t * threads[numThreads];
-StateContext context;
+StateContext * context;
 
 /*typedef struct
 {
@@ -65,10 +65,10 @@ void startControlThreads()
 {
 	int i;
 	int numControls = 4;
-	IOControl * io = new IOControl(&context);
-	MotorControl * mc = new MotorControl(&context);
-	OverCurrentControl * occ = new OverCurrentControl(&context);
-	BeamControl * bc = new BeamControl(&context);
+	IOControl * io = new IOControl(context);
+	MotorControl * mc = new MotorControl(context);
+	OverCurrentControl * occ = new OverCurrentControl(context);
+	BeamControl * bc = new BeamControl(context);
 	Control * controls[] = {io, mc, occ, bc};
 
 
@@ -91,11 +91,11 @@ void startControlThreads()
 }
 
 int main(int argc, char *argv[]) {
-	context = StateContext();
+	context = new StateContext();
 
 	startControlThreads();
 
-	context.run();
+	context->run();
 
 
 	/*

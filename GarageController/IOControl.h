@@ -9,6 +9,7 @@
 #define IOCONTROL_H_
 
 #include "StateContext.h"
+#include "StateEvents.h"
 #include "Control.h"
 
 class IOControl: public Control

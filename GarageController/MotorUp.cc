@@ -22,6 +22,7 @@ MotorUp::MotorUp() : State()
 void MotorUp::entryAction()
 {
 	MotorControl::motorUp = true;
+	MotorControl::motorDown = false;
 	//std::cout << "MotorUp entry Actions: motorUp = true" << std::endl;
 }
 
@@ -31,6 +32,7 @@ void MotorUp::entryAction()
 void MotorUp::exitAction()
 {
 	MotorControl::motorUp = false;
+	MotorControl::motorDown = false;
 	//std::cout << "MotorUp exit Actions: motorUp = false" << std::endl;
 }
 
