@@ -16,9 +16,9 @@ Transition::Transition(State * cState, State *nState, StateEvent sEvent)
 
 bool Transition::guard()
 {
-	if(currentState->statusId == "DoorStop")
+	if(currentState->getStatusId() == "DoorStop")
 	{
-		if((prevState->statusId == "MotorUp") || (prevState->statusId == "MotorDown"))
+		if((prevState->getStatusId() == "MotorUp") || (prevState->getStatusId() == "MotorDown"))
 			return true;
 		else
 			return false;
