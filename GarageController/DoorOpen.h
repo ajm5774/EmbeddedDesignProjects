@@ -12,11 +12,10 @@
 class DoorOpen: public State
 {
 public:
-	string statusId;
 	DoorOpen();
 	void entryAction();
 	void exitAction();
-
+	string getStatusId();
 };
 
 #endif /* DOOROPEN_H_ */
