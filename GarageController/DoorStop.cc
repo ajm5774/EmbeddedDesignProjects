@@ -8,7 +8,7 @@
 #include "DoorStop.h"
 
 
-DoorStop::DoorStop()
+DoorStop::DoorStop() : State()
 {
 	statusId = "DoorStop";
 }

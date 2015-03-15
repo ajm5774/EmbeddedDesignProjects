@@ -15,9 +15,9 @@ class State
 {
 public:
 	string statusId;
-	void entryAction();
-	void exitAction();
-	void activity();
+	State();
+	virtual void entryAction();
+	virtual void exitAction();
 	bool operator<(const State& state1) const { return statusId < state1.statusId;}
 };
 

@@ -8,7 +8,7 @@
 #include "MotorUp.h"
 #include "MotorControl.h"
 
-MotorUp::MotorUp()
+MotorUp::MotorUp() : State()
 {
 	statusId = "MotorUp";
 }
