@@ -16,8 +16,8 @@ class MotorControl: public Control
 public:
 	static bool motorUp;
 	static bool motorDown;
-	StateContext context;
-	MotorControl(StateContext context);
+	StateContext * context;
+	MotorControl(StateContext * context);
 	virtual void run();
 
 private:

@@ -13,9 +13,9 @@
 class OverCurrentControl: public Control
 {
 public:
-	StateContext context;
+	StateContext * context;
 	OverCurrentControl();
-	OverCurrentControl(StateContext context);
+	OverCurrentControl(StateContext * context);
 	virtual void run();
 };
 

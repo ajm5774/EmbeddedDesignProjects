@@ -14,9 +14,9 @@
 class IOControl: public Control
 {
 public:
-	StateContext context;
+	StateContext * context;
 	IOControl();
-	IOControl(StateContext context);
+	IOControl(StateContext * context);
 	virtual void run();
 };
 

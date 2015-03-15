@@ -12,7 +12,7 @@ Control::Control(){
 	printf("Control made");
 }
 
-Control::Control(StateContext aContext)
+Control::Control(StateContext * aContext)
 {
 	context = aContext;
 }

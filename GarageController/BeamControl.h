@@ -15,8 +15,8 @@ class BeamControl: public Control
 {
 public:
 	static bool beamOn;
-	StateContext context;
-	BeamControl(StateContext context);
+	StateContext * context;
+	BeamControl(StateContext * context);
 	virtual void run();
 };
 

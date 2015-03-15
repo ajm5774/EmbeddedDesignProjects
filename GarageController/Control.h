@@ -14,9 +14,9 @@
 class Control
 {
 public:
-	StateContext context;
+	StateContext * context;
 	Control();
-	Control(StateContext context);
+	Control(StateContext * context);
 	virtual void run();
 };
 

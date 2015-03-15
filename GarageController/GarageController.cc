@@ -11,14 +11,43 @@
 #include "BeamControl.h"
 #include "StateContext.h"
 
-pthread_t * threads[4];
+const int numThreads = 4;
+pthread_t * threads[numThreads];
 StateContext context;
 
-static void * controlWrapper(void * context)
+/*typedef struct
 {
-	Control * c = (Control *)context;
-	c->run();
-	printf("what just happened");
+	int * controlNum;
+	StateContext * context;
+} pthreadBundle;
+
+static void * controlWrapper(void * bund)
+{
+	int controlNum = *(((pthreadBundle *)bund)->controlNum);
+	StateContext * context = ((pthreadBundle *)bund)->context;
+
+	//this is ugly, but there isn't a better way to do this
+	//Decendants of Control run Control::run due to casting,
+	//pthread requires void * so a cast is necessary...
+	if(controlNum == 0)
+	{
+		IOControl * io = new IOControl(context);
+		io->run();
+	}
+
+	return NULL;
+}
+*/
+
+typedef struct
+{
+	Control * control;
+} pthreadBundle;
+
+static void * controlWrapper(void * bund)
+{
+	((pthreadBundle *) bund)->control->run();
+	return NULL;
 }
 
 
@@ -26,7 +55,7 @@ void startControlThreads()
 {
 	int i;
 	int numControls = 1;
-	Control controls[] = {IOControl(context)};
+	Control * controls[] = {new IOControl(&context)};
 	//controls[0] = IOControl(context);
 	//controls[1] = MotorControl(context);
 	//controls[2] = OverCurrentControl(context);
@@ -42,15 +71,27 @@ void startControlThreads()
 	pthread_attr_setschedparam(&threadAttributes, &parameters) ;	// set up the pthread_attr struct with the updated priority
 
 	// now create the threads and pass along its thread number from the loop counter.
+	pthreadBundle bundle = {NULL};
 	for(i =0; i < numControls; i++)
 	{
-		pthread_create( threads[i], &threadAttributes, controlWrapper, (void *)&controls[0]);
+		bundle.control = controls[i];
+		pthread_create( threads[i], &threadAttributes, controlWrapper, (void *)&bundle);
 	}
+
+
 }
 
 int main(int argc, char *argv[]) {
 	context = StateContext();
+
 	startControlThreads();
+
+	while(true){}
+
+	pthread_join(*threads[0], 0);
+	pthread_join(*threads[1], 0);
+	pthread_join(*threads[2], 0);
+	pthread_join(*threads[3], 0);
 }
 
 

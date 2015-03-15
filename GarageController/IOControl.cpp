@@ -13,7 +13,7 @@ IOControl::IOControl(): Control()
 	printf("IOControl made");
 }
 
-IOControl::IOControl(StateContext aContext): Control(aContext)
+IOControl::IOControl(StateContext * aContext): Control(aContext)
 {
 	context = aContext;
 }
