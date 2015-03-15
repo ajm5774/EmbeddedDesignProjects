@@ -10,6 +10,7 @@
 #include "OvercurrentControl.h"
 #include "BeamControl.h"
 #include "StateContext.h"
+#include <unistd.h>
 
 const int numThreads = 4;
 pthread_t * threads[numThreads];
@@ -54,12 +55,13 @@ static void * controlWrapper(void * bund)
 void startControlThreads()
 {
 	int i;
-	int numControls = 1;
-	Control * controls[] = {new IOControl(&context)};
-	//controls[0] = IOControl(context);
-	//controls[1] = MotorControl(context);
-	//controls[2] = OverCurrentControl(context);
-	//controls[3] = BeamControl(context);
+	int numControls = 4;
+	IOControl * io = new IOControl(&context);
+	MotorControl * mc = new MotorControl(&context);
+	OverCurrentControl * occ = new OverCurrentControl(&context);
+	BeamControl * bc = new BeamControl(&context);
+	Control * controls[] = {io, mc, occ, bc};
+
 
 	pthread_attr_t threadAttributes ;
 	int policy ;
@@ -86,7 +88,10 @@ int main(int argc, char *argv[]) {
 
 	startControlThreads();
 
-	while(true){}
+	while(true)
+	{
+		sleep(2000);
+	}
 
 	pthread_join(*threads[0], 0);
 	pthread_join(*threads[1], 0);

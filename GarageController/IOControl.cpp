@@ -10,7 +10,7 @@ using namespace std;
 
 IOControl::IOControl(): Control()
 {
-	printf("IOControl made");
+	printf("IOControl made\n");
 }
 
 IOControl::IOControl(StateContext * aContext): Control(aContext)
@@ -23,22 +23,25 @@ void IOControl::run()
 	char ch;
 	while(true)
 	{
+		system ("/bin/stty raw");
 		ch = getchar();
 
 		switch(ch)
 		{
 			case 'm':
 				//context.queueEvent(new QueueItem(MotorOvercurrent));
-				cout << "m";
+				cout << "m\n";
 				break;
 			case 'i':
 				//context.queueEvent(new QueueItem(BeamInterrupt));
-				cout << "i";
+				cout << "i\n";
 				break;
 			case 'r':
 				//context.queueEvent(new QueueItem(RemotePressed));
-				cout << "r";
+				cout << "r\n";
 				break;
+			default:
+				cout << "Key not identified\n";
 		}
 	}
 

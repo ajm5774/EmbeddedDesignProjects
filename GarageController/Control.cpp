@@ -9,7 +9,7 @@
 
 Control::Control(){
 
-	printf("Control made");
+	printf("Control made\n");
 }
 
 Control::Control(StateContext * aContext)
