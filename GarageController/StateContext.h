@@ -27,14 +27,14 @@ class StateContext
 {
 	State * currentState;
 	State * previousState;
-	std::map<State, std::vector<Transition> > stateTransitions;
+	std::map<State *, std::vector<Transition> > stateTransitions;
 
 	// creating the states
-	DoorOpen dooropen;
-	DoorClose doorclose;
-	DoorStop doorstop;
-	MotorUp motorup;
-	MotorDown motordown;
+	DoorOpen * dooropen;
+	DoorClose* doorclose;
+	DoorStop* doorstop;
+	MotorUp* motorup;
+	MotorDown* motordown;
 
 public:
 	StateContext();

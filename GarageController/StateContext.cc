@@ -15,36 +15,38 @@
 StateContext::StateContext()
 {
 	// creating the states
-	//DoorOpen dooropen;
-	//DoorClose doorclose;
-	//DoorStop doorstop;
-	//MotorUp motorup;
-	//MotorDown motordown;
+	DoorOpen * dooropen = new DoorOpen();
+	DoorClose * doorclose= new DoorClose();
+	DoorStop * doorstop= new DoorStop();
+	MotorUp * motorup= new MotorUp();
+	MotorDown * motordown= new MotorDown();
+
+	currentState = doorclose;
 
 	//StateEvent event1 = remote_pressed;
 	// transitions associate with DoorClose state
-	Transition DC_trans1(&doorclose, &motorup, remote_pressed);
+	Transition DC_trans1(doorclose, motorup, remote_pressed);
 
 	// transitions associate with MotorUp state
-	Transition MU_trans1(&motorup, &dooropen, door_open);
-	Transition MU_trans2(&motorup, &doorstop, remote_pressed);
-	Transition MU_trans3(&motorup, &doorstop, motor_overcurrent);
+	Transition MU_trans1(motorup, dooropen, door_open);
+	Transition MU_trans2(motorup, doorstop, remote_pressed);
+	Transition MU_trans3(motorup, doorstop, motor_overcurrent);
 
 	// transitions associate with DoorOpen state
-	Transition DO_trans1(&dooropen, &motordown, remote_pressed);
+	Transition DO_trans1(dooropen, motordown, remote_pressed);
 
 	// transitions associate with MotorDown state
-	Transition MD_trans1(&motordown, &doorclose, door_close);
-	Transition MD_trans2(&motordown, &doorstop, remote_pressed);
-	Transition MD_trans3(&motordown, &motorup, motor_overcurrent);
-	Transition MD_trans4(&motordown, &motorup, beam_interrupt);
+	Transition MD_trans1(motordown, doorclose, door_close);
+	Transition MD_trans2(motordown, doorstop, remote_pressed);
+	Transition MD_trans3(motordown, motorup, motor_overcurrent);
+	Transition MD_trans4(motordown, motorup, beam_interrupt);
 
 	// transitions associate with DoorStop state
-	Transition DS_trans1(&doorstop, &motorup, remote_pressed);
-	Transition DS_trans2(&doorstop, &motordown, remote_pressed);
+	Transition DS_trans1(doorstop, motorup, remote_pressed);
+	Transition DS_trans2(doorstop, motordown, remote_pressed);
 	// need add guard to check previous state
-	DS_trans1.addGuard(&motordown);
-	DS_trans2.addGuard(&motorup);
+	DS_trans1.addGuard(motordown);
+	DS_trans2.addGuard(motorup);
 
 	// add the states and transition to map
 	//stateTransitions.insert(std::make_pair(doorclose, DC_trans1));
@@ -87,7 +89,7 @@ void StateContext::accept(StateEvent event)
 
 	//Transition trans[4]= stateTransitions[*currentState];
 	std::vector<Transition> trans;
-	trans = stateTransitions[*currentState];
+	trans = stateTransitions[currentState];
 	// loop counter
 	int i = 0;
 	int length = sizeof(trans)/sizeof(Transition);
@@ -109,10 +111,11 @@ void StateContext::accept(StateEvent event)
 	}
 }
 
-void run()
+void StateContext::run()
 {
 	QueueItem * nextItem;
 
+	struct _pulse pulse;
 	startInterrupt(&timer);
 	while(true)
 	{
