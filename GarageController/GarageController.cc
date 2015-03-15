@@ -11,7 +11,7 @@
 #include "OvercurrentControl.h"
 #include "BeamControl.h"
 #include "StateContext.h"
-#include "State.h"
+#include <unistd.h>
 #include "DoorOpen.h"
 #include "DoorClose.h"
 #include "DoorStop.h"
@@ -64,12 +64,13 @@ static void * controlWrapper(void * bund)
 void startControlThreads()
 {
 	int i;
-	int numControls = 1;
-	Control * controls[] = {new IOControl(&context)};
-	//controls[0] = IOControl(context);
-	//controls[1] = MotorControl(context);
-	//controls[2] = OverCurrentControl(context);
-	//controls[3] = BeamControl(context);
+	int numControls = 4;
+	IOControl * io = new IOControl(&context);
+	MotorControl * mc = new MotorControl(&context);
+	OverCurrentControl * occ = new OverCurrentControl(&context);
+	BeamControl * bc = new BeamControl(&context);
+	Control * controls[] = {io, mc, occ, bc};
+
 
 	pthread_attr_t threadAttributes ;
 	int policy ;
