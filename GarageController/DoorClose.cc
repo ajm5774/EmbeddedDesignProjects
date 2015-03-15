@@ -7,7 +7,7 @@
 
 #include "DoorClose.h"
 
-DoorClose::DoorClose()
+DoorClose::DoorClose() : State()
 {
 	statusId = "DoorClose";
 }

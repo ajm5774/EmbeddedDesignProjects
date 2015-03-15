@@ -16,11 +16,17 @@ Transition::Transition(State * cState, State *nState, StateEvent sEvent)
 
 bool Transition::guard()
 {
-
+	if(currentState->statusId == "DoorStop")
+	{
+		if((prevState->statusId == "MotorUp") || (prevState->statusId == "MotorDown"))
+			return true;
+		else
+			return false;
+	}
 	return true;
 }
 
-void Transition::addGuard(bool (*f)())
+void Transition::addGuard(State * pState)
 {
-
+	prevState = pState;
 }

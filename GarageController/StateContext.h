@@ -19,13 +19,14 @@
 #include "DoorStop.h"
 #include "MotorUp.h"
 #include "MotorDown.h"
+#include <vector>
 
 
 class StateContext
 {
 	State * currentState;
 	State * previousState;
-	std::map<State, Transition> stateTransitions;
+	std::map<State, std::vector<Transition> > stateTransitions;
 
 	// creating the states
 	DoorOpen dooropen;

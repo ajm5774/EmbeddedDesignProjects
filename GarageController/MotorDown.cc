@@ -10,7 +10,7 @@
 #include "BeamControl.h"
 
 
-MotorDown::MotorDown()
+MotorDown::MotorDown() : State()
 {
 	statusId = "MotorDown";
 }

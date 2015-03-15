@@ -8,7 +8,7 @@
 #include "DoorOpen.h"
 
 
-DoorOpen::DoorOpen()
+DoorOpen::DoorOpen() : State()
 {
 	statusId = "DoorOpen";
 }

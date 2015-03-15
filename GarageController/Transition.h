@@ -17,12 +17,13 @@ public:
 
 	State * nextState;
 	State * currentState;
+	State * prevState;
 	StateEvent triggerEvent;
 
 
-	Transition(State * currState, State * nextState, StateEvent trigEvent);
+	Transition(State * cState, State *nState, StateEvent sEvent);
 	bool guard();
-	void addGuard(bool (*f)());
+	void addGuard(State * pState);
 };
 
 #endif /* TRANSITION_H_ */
