@@ -69,6 +69,8 @@ StateContext::StateContext()
 	//stateTransitions.insert(std::make_pair(doorstop, DStrans));
 	stateTransitions[doorstop].push_back(DS_trans1);
 	stateTransitions[doorstop].push_back(DS_trans2);
+
+	CreateInterrupt(&timer, 500000, 0);//2 times a second
 }
 
 /*
@@ -105,7 +107,23 @@ void StateContext::accept(StateEvent event)
 			}
 		}
 	}
+}
 
+void run()
+{
+	QueueItem * nextItem;
+
+	startInterrupt(&timer);
+	while(true)
+	{
+		MsgReceive(timer.chid, &pulse, sizeof(pulse), NULL);
+		nextItem = queue.dequeue();
+
+		if(nextItem)
+		{
+			accept(nextItem->event);
+		}
+	}
 }
 
 

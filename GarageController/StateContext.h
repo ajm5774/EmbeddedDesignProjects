@@ -20,7 +20,8 @@
 #include "MotorUp.h"
 #include "MotorDown.h"
 #include <vector>
-
+#include "Timer.h"
+#include <sys/neutrino.h>
 
 class StateContext
 {
@@ -38,8 +39,10 @@ class StateContext
 public:
 	StateContext();
 	void queueEvent(StateEvent event);
+	void run();
 
 private:
+	Interrupt timer;
 	ConcurrentQueue queue;
 	void accept(StateEvent event);
 };

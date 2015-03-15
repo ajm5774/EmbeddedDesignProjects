@@ -91,19 +91,14 @@ void startControlThreads()
 }
 
 int main(int argc, char *argv[]) {
-	//context = StateContext();
+	context = StateContext();
 
-	//startControlThreads();
+	startControlThreads();
 
-	//while(true){}
-
-	//pthread_join(*threads[0], 0);
-	//pthread_join(*threads[1], 0);
-	//pthread_join(*threads[2], 0);
-	//pthread_join(*threads[3], 0);
+	context.run();
 
 	// testing
-	cout << "Hello Test" << endl;
+	/*cout << "Hello Test" << endl;
 	DoorClose s1;
 	cout << "s1 status: " << s1.getStatusId() << endl;
 	s1.entryAction();
@@ -127,7 +122,7 @@ int main(int argc, char *argv[]) {
 	Transition t1(&s1, &s4, remote_pressed);
 	cout << "t1 current state: " << (t1.currentState)->getStatusId() << endl;
 	cout << "t1 next state: " << (t1.nextState)->getStatusId() << endl;
-	cout << "t1 trigger event: " << t1.triggerEvent << endl;
+	cout << "t1 trigger event: " << t1.triggerEvent << endl;*/
 
 
 
