@@ -14,11 +14,13 @@ using namespace std;
 class State
 {
 public:
-	string statusId;
+	//string statusId;
 	State();
+	virtual std::string getStatusId();
 	virtual void entryAction();
 	virtual void exitAction();
-	bool operator<(const State& state1) const { return statusId < state1.statusId;}
+	//bool operator<(const State& state1) const { return this.getStatusId() < state1.getStatusId();}
+
 };
 
 #endif /* STATE_H_ */

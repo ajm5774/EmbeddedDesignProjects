@@ -12,10 +12,10 @@
 class DoorClose: public State
 {
 public:
-	string statusId;
 	DoorClose();
 	void entryAction();
 	void exitAction();
+	string getStatusId();
 
 };
 

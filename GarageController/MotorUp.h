@@ -12,11 +12,10 @@
 class MotorUp: public State
 {
 public:
-	string statusId;
 	MotorUp();
 	void entryAction();
 	void exitAction();
-	void activity();
+	string getStatusId();
 };
 
 

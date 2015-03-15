@@ -9,7 +9,6 @@
 
 State::State()
 {
-	statusId = "state";
 }
 
 void State::entryAction()
@@ -18,4 +17,9 @@ void State::entryAction()
 
 void State::exitAction()
 {
+}
+
+std::string State::getStatusId()
+{
+	return "";
 }

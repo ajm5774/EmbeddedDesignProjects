@@ -6,16 +6,33 @@
  */
 
 #include "DoorClose.h"
+#include <iostream>
 
+/*
+ * Constructor for DoorClose state
+ */
 DoorClose::DoorClose() : State()
 {
-	statusId = "DoorClose";
+	//statusId = "DoorClose";
 }
 
+/*
+ * entry actions for DoorClose state
+ */
 void DoorClose::entryAction()
 {
+	std::cout << "DoorClose entry actions: None" << std::endl;
 }
 
+/*
+ * exit actions for DoorClose state
+ */
 void DoorClose::exitAction()
 {
+	std::cout << "DoorClose exit actions: None" << std::endl;
+}
+
+string DoorClose::getStatusId()
+{
+	return "DoorClose";
 }

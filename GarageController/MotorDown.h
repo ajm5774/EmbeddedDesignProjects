@@ -12,11 +12,10 @@
 class MotorDown: public State
 {
 public:
-	string statusId;
 	MotorDown();
 	void entryAction();
 	void exitAction();
-	void activity();
+	string getStatusId();
 };
 
 #endif /* MOTORDOWN_H_ */
