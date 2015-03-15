@@ -7,6 +7,7 @@
 
 #include "StateContext.h"
 #include <vector>
+#include <iostream>
 
 /*
  * StateContext constructor
@@ -41,20 +42,33 @@ StateContext::StateContext()
 	// transitions associate with DoorStop state
 	Transition DS_trans1(&doorstop, &motorup, remote_pressed);
 	Transition DS_trans2(&doorstop, &motordown, remote_pressed);
-	// need addguard to check previous state
+	// need add guard to check previous state
+	DS_trans1.addGuard(&motordown);
+	DS_trans2.addGuard(&motorup);
 
 	// add the states and transition to map
-	stateTransitions.insert(std::make_pair(doorclose, DC_trans1));
-	stateTransitions.insert(std::make_pair(dooropen, DO_trans1));
+	//stateTransitions.insert(std::make_pair(doorclose, DC_trans1));
+	//stateTransitions.insert(std::make_pair(dooropen, DO_trans1));
+	stateTransitions[doorclose].push_back(DC_trans1);
+	stateTransitions[dooropen].push_back(DO_trans1);
 
-	Transition MUtrans[] = {MU_trans1, MU_trans2, MU_trans3};
-	stateTransitions.insert(std::make_pair(motorup, MUtrans));
+	//Transition MUtrans[] = {MU_trans1, MU_trans2, MU_trans3};
+	//stateTransitions.insert(std::make_pair(motorup, MUtrans));
+	stateTransitions[motorup].push_back(MU_trans1);
+	stateTransitions[motorup].push_back(MU_trans2);
+	stateTransitions[motorup].push_back(MU_trans3);
 
-	Transition MDtrans[] = {MD_trans1, MD_trans2, MD_trans3, MD_trans4};
-	stateTransitions.insert(std::make_pair(motordown, MDtrans));
+	//Transition MDtrans[] = {MD_trans1, MD_trans2, MD_trans3, MD_trans4};
+	//stateTransitions.insert(std::make_pair(motordown, MDtrans));
+	stateTransitions[motordown].push_back(MD_trans1);
+	stateTransitions[motordown].push_back(MD_trans2);
+	stateTransitions[motordown].push_back(MD_trans3);
+	stateTransitions[motordown].push_back(MD_trans4);
 
-	Transition DStrans[] = {DS_trans1, DS_trans2};
-	stateTransitions.insert(std::make_pair(doorstop, DStrans));
+	//Transition DStrans[] = {DS_trans1, DS_trans2};
+	//stateTransitions.insert(std::make_pair(doorstop, DStrans));
+	stateTransitions[doorstop].push_back(DS_trans1);
+	stateTransitions[doorstop].push_back(DS_trans2);
 }
 
 /*
@@ -69,8 +83,9 @@ void StateContext::queueEvent(StateEvent event)
 void StateContext::accept(StateEvent event)
 {
 
-	Transition trans[4]= stateTransitions[*currentState];
-
+	//Transition trans[4]= stateTransitions[*currentState];
+	std::vector<Transition> trans;
+	trans = stateTransitions[*currentState];
 	// loop counter
 	int i = 0;
 	int length = sizeof(trans)/sizeof(Transition);
@@ -91,6 +106,6 @@ void StateContext::accept(StateEvent event)
 		}
 	}
 
-
-
 }
+
+
