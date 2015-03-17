@@ -25,7 +25,6 @@ void MotorDown::entryAction()
 	MotorControl::motorUp = false;
 	MotorControl::motorDown = true;
 	BeamControl::beamOn = true;
-	//std::cout << "MotorDown entry actions: motorUp = false, motorDown = true, beamOn = true" << std::endl;
 }
 
 /*
@@ -36,7 +35,6 @@ void MotorDown::exitAction()
 	BeamControl::beamOn = false;
 	MotorControl::motorDown = false;
 	MotorControl::motorUp = false;
-	//std::cout << "MotorDown exit actions: motorUp = false, motorDown = false, beamOn = false" << std::endl;
 }
 
 string MotorDown::getStatusId()

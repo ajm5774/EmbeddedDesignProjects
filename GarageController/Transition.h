@@ -15,15 +15,15 @@ class Transition
 
 public:
 
+	StateEvent triggerEvent;
 	State * nextState;
 	State * currentState;
 	State * prevState;
-	StateEvent triggerEvent;
-
 
 	Transition(State * cState, State *nState, StateEvent sEvent);
 	bool guard();
 	void addGuard(State * pState);
+	StateEvent getTriggerEvent();
 };
 
 #endif /* TRANSITION_H_ */

@@ -23,11 +23,9 @@
 #include "Timer.h"
 #include <sys/neutrino.h>
 
-class StateContext
-{
+class StateContext {
 	State * currentState;
 	State * previousState;
-	std::map<State *, std::vector<Transition> > stateTransitions;
 
 	// creating the states
 	DoorOpen * dooropen;
@@ -45,6 +43,7 @@ private:
 	Interrupt timer;
 	ConcurrentQueue queue;
 	void accept(StateEvent event);
+	Transition * getTransition(State * state, StateEvent event);
 };
 
 #endif /* STATECONTEXT_H_ */

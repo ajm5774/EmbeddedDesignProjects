@@ -11,7 +11,7 @@ BeamControl::BeamControl(): Control()
 BeamControl::BeamControl(StateContext * aContext): Control(aContext)
 {
 	context = aContext;
-	CreateInterrupt(&timer, 500000, 0);//2 times a second
+	CreateInterrupt(&timer, 0, 1);//every second
 }
 
 void BeamControl::run()
@@ -22,13 +22,9 @@ void BeamControl::run()
 	while(true)
 	{
 		MsgReceive(timer.chid, &pulse, sizeof(pulse), NULL);
-		if(beamOn)
+		if(BeamControl::beamOn)
 		{
 			printf("Beam is on! \n");
-		}
-		else
-		{
-			//printf("Beam is off! \n");
 		}
 	}
 }
