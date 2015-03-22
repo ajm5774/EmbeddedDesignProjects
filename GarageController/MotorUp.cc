@@ -23,7 +23,7 @@ void MotorUp::entryAction()
 {
 	MotorControl::motorUp = true;
 	MotorControl::motorDown = false;
-	//std::cout << "MotorUp entry Actions: motorUp = true" << std::endl;
+	std::cout << "MotorUp entry Actions: motorUp is on!" << std::endl;
 }
 
 /*
@@ -33,7 +33,7 @@ void MotorUp::exitAction()
 {
 	MotorControl::motorUp = false;
 	MotorControl::motorDown = false;
-	//std::cout << "MotorUp exit Actions: motorUp = false" << std::endl;
+	std::cout << "MotorUp exit Actions: motorUp is off!" << std::endl;
 }
 
 string MotorUp::getStatusId()

@@ -27,6 +27,6 @@ void OverCurrentControl::run()
 	while(true)
 	{
 		MsgReceive(timer.chid, &pulse, sizeof(pulse), NULL);
-		printf("Checking for overcurrent\n");
+		//printf("Checking for overcurrent\n");
 	}
 }

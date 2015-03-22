@@ -21,7 +21,7 @@ IOControl::IOControl(StateContext * aContext) :
 
 void IOControl::run() {
 	char ch;
-	cout << "Awaiting character input:\n";
+	cout << "Awaiting character input: \n";
 	while (true) {
 		//system ("/bin/stty raw");
 		ch = getchar();
@@ -44,6 +44,8 @@ void IOControl::run() {
 			break;
 		default:
 			cout << "Key not identified\n";
+			cout << "Please use the following inputs: 'r'-remote_pressed, 'm'-motor_overcurrent, 'i'-beam interrupt"
+			<< endl;
 		}
 	}
 

@@ -127,8 +127,6 @@ int main(int argc, char *argv[]) {
 	cout << "t1 trigger event: " << t1.triggerEvent << endl;
 	*/
 
-
-
 }
 
 
