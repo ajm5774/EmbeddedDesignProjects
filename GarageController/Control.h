@@ -37,7 +37,7 @@
 
 //Interrupts
 #define INTERRUPT_CTRL		DAQ_BASE+4
-#define IRQ_ENABLE			2
+#define IRQ_ENABLE			0x02
 
 class Control
 {
