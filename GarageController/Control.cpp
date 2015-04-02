@@ -9,9 +9,10 @@
 #include <stdint.h>
 #include <sys/mman.h>
 
-uintptr_t Control::ctrlHandle = mmap_device_io(PORT_LENGTH, DATA_CTRL);
-uintptr_t Control::inputHandle = mmap_device_io(PORT_LENGTH,DATA_INPUT);
-uintptr_t Control::outputHandle = mmap_device_io(PORT_LENGTH,DATA_OUTPUT);
+uintptr_t Control::ctrlHandle = mmap_device_io(PORT_LENGTH, DAQ_CTRL);
+uintptr_t Control::inputHandle = mmap_device_io(PORT_LENGTH,DAQ_INPUT);
+uintptr_t Control::outputHandle = mmap_device_io(PORT_LENGTH,DAQ_OUTPUT);
+uintptr_t Control::interHandle = mmap_device_io(PORT_LENGTH,INTERRUPT_CTRL);
 
 Control::Control(){
 

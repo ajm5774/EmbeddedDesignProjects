@@ -32,6 +32,7 @@ void MotorControl::run()
 		{
 			printf("Motor moving door up\n");
 			count++;
+			out8()
 			if(count >= 20)
 			{
 				context->queueEvent(door_open);

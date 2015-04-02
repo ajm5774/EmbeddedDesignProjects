@@ -25,8 +25,11 @@ public:
 
 private:
 	Interrupt timer;
+	uintptr_t fullOpenH;
+	uintptr_t fullClosedH;
 	void doorClose();
 	void doorOpen();
+
 };
 
 #endif /* MOTORCONTROL_H_ */

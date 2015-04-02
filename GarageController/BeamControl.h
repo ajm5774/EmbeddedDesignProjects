@@ -13,6 +13,10 @@
 #include "Timer.h"
 #include <sys/neutrino.h>
 
+#define BASE_ADDR 280
+#define IO_PORT_SIZE 1
+#define BBH_CTRL_ADDR 0x37
+
 class BeamControl: public Control
 {
 public:
@@ -23,6 +27,7 @@ public:
 	virtual void run();
 
 private:
+	uintptr_t beamBrokenH;
 	Interrupt timer;
 };
 

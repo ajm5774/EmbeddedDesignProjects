@@ -25,29 +25,6 @@ const int numThreads = 4;
 pthread_t * threads[numThreads];
 StateContext * context;
 
-/*typedef struct
-{
-	int * controlNum;
-	StateContext * context;
-} pthreadBundle;
-
-static void * controlWrapper(void * bund)
-{
-	int controlNum = *(((pthreadBundle *)bund)->controlNum);
-	StateContext * context = ((pthreadBundle *)bund)->context;
-
-	//this is ugly, but there isn't a better way to do this
-	//Decendants of Control run Control::run due to casting,
-	//pthread requires void * so a cast is necessary...
-	if(controlNum == 0)
-	{
-		IOControl * io = new IOControl(context);
-		io->run();
-	}
-
-	return NULL;
-}
-*/
 
 typedef struct
 {
@@ -90,43 +67,21 @@ void startControlThreads()
 	}
 }
 
+void IOInit()
+{
+	//enables interrupts
+	out8(Control::interHandle, IRQ_ENABLE);
+
+	//set IO direction
+	out8(Control::ctrlHandle, CTRL_INIT);
+}
+
 int main(int argc, char *argv[]) {
 	context = new StateContext();
-
+	IOInit();
 	startControlThreads();
 
 	context->run();
-
-
-	/*
-	// testing
-	cout << "Hello Test" << endl;
-	DoorClose s1;
-	cout << "s1 status: " << s1.getStatusId() << endl;
-	s1.entryAction();
-
-	DoorOpen s2;
-	cout << "s2 status: " << s2.getStatusId() << endl;
-	s2.entryAction();
-
-	DoorStop s3;
-	cout << "s3 status: " << s3.getStatusId() << endl;
-	s3.entryAction();
-
-	MotorUp s4;
-	cout << "s4 status: " << s4.getStatusId() << endl;
-	s4.entryAction();
-
-	MotorDown s5;
-	cout << "s5 status: " << s5.getStatusId() << endl;
-	s5.entryAction();
-
-	Transition t1(&s1, &s4, remote_pressed);
-	cout << "t1 current state: " << (t1.currentState)->getStatusId() << endl;
-	cout << "t1 next state: " << (t1.nextState)->getStatusId() << endl;
-	cout << "t1 trigger event: " << t1.triggerEvent << endl;
-	*/
-
 }
 
 
