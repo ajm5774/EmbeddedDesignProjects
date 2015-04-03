@@ -11,6 +11,7 @@
 #include "Control.h"
 #include "StateContext.h"
 #include "Timer.h"
+#include <stdint.h>
 #include <sys/neutrino.h>
 
 #define BASE_ADDR 280

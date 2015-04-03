@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <pthread.h>
 #include <iostream>
+#include <hw/inout.h>
 #include "ConcurrentQueue.h"
 #include "QueueItem.h"
 #include "StateEvents.h"
@@ -18,6 +19,7 @@
 #include "MotorUp.h"
 #include "MotorDown.h"
 #include "Transition.h"
+#include "GarageController.h"
 
 using namespace std;
 
@@ -36,7 +38,6 @@ static void * controlWrapper(void * bund)
 	((pthreadBundle *) bund)->control->run();
 	return NULL;
 }
-
 
 void startControlThreads()
 {
@@ -82,6 +83,16 @@ int main(int argc, char *argv[]) {
 	startControlThreads();
 
 	context->run();
+}
+
+void resetController()
+{
+	int i;
+	for(i = 0; i < numThreads;i++)
+	{
+		pthread_kill(*threads[i], 0);
+	}
+	main(0,0);
 }
 
 

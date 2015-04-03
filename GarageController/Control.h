@@ -11,6 +11,8 @@
 #include <pthread.h>
 #include "StateContext.h"
 #include <sys/neutrino.h>
+#include <stdint.h>
+#include <hw/inout.h>
 
 
 #define DAQ_BASE 0x280
@@ -30,6 +32,7 @@
 #define MOTOR_DOWN_PIN 		1
 #define IR_BEAM_ON 			2
 #define RESET_SIM 			3
+char OUTPUT = 0x00;
 
 //IO CTRL
 #define DAQ_CTRL 			DAQ_BASE+11
@@ -38,6 +41,7 @@
 //Interrupts
 #define INTERRUPT_CTRL		DAQ_BASE+4
 #define IRQ_ENABLE			0x02
+#define IRQ0 				0
 
 class Control
 {
@@ -45,7 +49,10 @@ public:
 	StateContext * context;
 	Control();
 	Control(StateContext * context);
-	static uintptr_t inputHandle, outputHandle, ctrlHandle, interHandle;
+	static uintptr_t inputHandle;
+	static uintptr_t outputHandle;
+	static uintptr_t ctrlHandle;
+	static uintptr_t interHandle;
 	virtual void run();
 };
 
