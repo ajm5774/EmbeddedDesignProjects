@@ -7,7 +7,6 @@
 
 #include "MotorDown.h"
 #include "MotorControl.h"
-#include "BeamControl.h"
 #include <iostream>
 
 /*
@@ -24,8 +23,6 @@ void MotorDown::entryAction()
 {
 	MotorControl::motorUp = false;
 	MotorControl::motorDown = true;
-	BeamControl::beamOn = true;
-	std::cout << "MotorDown entryAction: beam is on!" << std::endl;
 }
 
 /*
@@ -33,10 +30,8 @@ void MotorDown::entryAction()
  */
 void MotorDown::exitAction()
 {
-	BeamControl::beamOn = false;
 	MotorControl::motorDown = false;
 	MotorControl::motorUp = false;
-	std::cout << "MotorDown entryAction: beam is off!" << std::endl;
 }
 
 string MotorDown::getStatusId()

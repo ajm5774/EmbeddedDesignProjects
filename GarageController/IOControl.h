@@ -12,10 +12,6 @@
 #include "StateEvents.h"
 #include "Control.h"
 
-bool reset;
-StateEvent event;
-
-const struct sigevent * intHandler (void *arg, int id);
 
 class IOControl: public Control
 {
@@ -28,6 +24,9 @@ public:
 private:
 	Interrupt timer;
 	void IOInterruptInit();
+	uint8_t input;
+	uint8_t lastInput;
+	StateEvent event;
 };
 
 int getChar();

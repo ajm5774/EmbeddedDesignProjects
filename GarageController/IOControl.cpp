@@ -11,29 +11,7 @@
 #include <iostream>
 using namespace std;
 
-bool reset 			= false;
-StateEvent event 	= invalid;
 
-const struct sigevent * intHandler (void *arg, int id)
-{
-	switch (id) {
-		case 0:
-			reset = true;
-			break;
-		case 1:
-			event = beam_interrupt;
-			break;
-		case 2:
-			event = motor_overcurrent;
-			break;
-		case 3:
-			event = remote_pressed;
-			break;
-		default:
-			break;
-	}
-	return (NULL);
-}
 
 IOControl::IOControl() :
 	Control() {
@@ -44,15 +22,15 @@ IOControl::IOControl(StateContext * aContext) :
 	Control(aContext) {
 	context = aContext;
 	event = invalid;
-	reset = false;
-	IOInterruptInit();
-	CreateInterrupt(&timer, 200000, 0);//5 times a second
+	input = 0;
+	lastInput = 0;
+	CreateInterrupt(&timer, 100000, 0);//5 times a second
 }
 
-void IOControl::IOInterruptInit()
+/*void IOControl::IOInterruptInit()
 {
 	struct sigevent event;
-	int interruptID = InterruptAttach (IRQ0,
+	int interruptID = InterruptAttach (IRQ4,
 	                                   intHandler,
 	                                   &event,
 	                                   sizeof (event),
@@ -63,6 +41,7 @@ void IOControl::IOInterruptInit()
 		exit (EXIT_FAILURE);
 	}
 }
+*/
 
 void IOControl::run() {
 	struct _pulse pulse;
@@ -71,28 +50,36 @@ void IOControl::run() {
 	while (true) {
 		MsgReceive(timer.chid, &pulse, sizeof(pulse), NULL);
 
-		if(reset)
+		lastInput = input;
+		input = in8(inputHandle);
+
+		if(lastInput != input)
 		{
-			resetController();
-			reset = false;
+			if((input & FULL_OPEN_PIN_MASK) &&
+					!(lastInput & FULL_OPEN_PIN_MASK))
+				event = door_open;
+			else if((input & FULL_CLOSED_PIN_MASK) &&
+					!(lastInput & FULL_CLOSED_PIN_MASK))
+				event = door_close;
+			else if((input & IR_BROKEN_PIN_MASK) &&
+					!(lastInput & IR_BROKEN_PIN_MASK))
+				event = beam_interrupt;
+			else if ((input & OVERCURRENT_PIN_MASK) &&
+					!(lastInput & OVERCURRENT_PIN_MASK))
+				event = motor_overcurrent;
+			else if ((input & REMOTE_PIN_MASK) &&
+					!(lastInput & REMOTE_PIN_MASK))
+				event = remote_pressed;
+			else
+				event = invalid;
 		}
-		else if(event)
+
+		if(event != invalid)
 		{
-			switch (event) {
-				case motor_overcurrent:
-					context->queueEvent(motor_overcurrent);
-					break;
-				case beam_interrupt:
-					context->queueEvent(beam_interrupt);
-					break;
-				case remote_pressed:
-					context->queueEvent(remote_pressed);
-					break;
-				default:
-					break;
-			}
+			context->queueEvent(event);
 			event = invalid;
 		}
+
 	}
 
 }

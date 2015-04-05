@@ -9,8 +9,6 @@
 #include "Control.h"
 #include "IOControl.h"
 #include "MotorControl.h"
-#include "OvercurrentControl.h"
-#include "BeamControl.h"
 #include "StateContext.h"
 #include <unistd.h>
 #include "DoorOpen.h"
@@ -35,6 +33,7 @@ typedef struct
 
 static void * controlWrapper(void * bund)
 {
+	ThreadCtl( _NTO_TCTL_IO, NULL );
 	((pthreadBundle *) bund)->control->run();
 	return NULL;
 }
@@ -42,12 +41,10 @@ static void * controlWrapper(void * bund)
 void startControlThreads()
 {
 	int i;
-	int numControls = 4;
+	int numControls = 2;
 	IOControl * io = new IOControl(context);
 	MotorControl * mc = new MotorControl(context);
-	OverCurrentControl * occ = new OverCurrentControl(context);
-	BeamControl * bc = new BeamControl(context);
-	Control * controls[] = {io, mc, occ, bc};
+	Control * controls[] = {io, mc};
 
 
 	pthread_attr_t threadAttributes ;
@@ -70,11 +67,19 @@ void startControlThreads()
 
 void IOInit()
 {
+	ThreadCtl( _NTO_TCTL_IO, NULL );
+
 	//enables interrupts
-	out8(Control::interHandle, IRQ_ENABLE);
+	//out8(Control::interHandle, IRQ_ENABLE);
 
 	//set IO direction
 	out8(Control::ctrlHandle, CTRL_INIT);
+
+	//reset the spartan board simulation
+	out8(Control::outputHandle, 0x00);//output low
+	usleep(1000);
+	Control::OUTPUT = RESET_SIM_MASK;
+	out8(Control::outputHandle, RESET_SIM_MASK);//go back to outputting high
 }
 
 int main(int argc, char *argv[]) {
@@ -85,14 +90,5 @@ int main(int argc, char *argv[]) {
 	context->run();
 }
 
-void resetController()
-{
-	int i;
-	for(i = 0; i < numThreads;i++)
-	{
-		pthread_kill(*threads[i], 0);
-	}
-	main(0,0);
-}
 
 
