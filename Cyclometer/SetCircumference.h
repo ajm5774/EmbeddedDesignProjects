@@ -8,5 +8,15 @@
 #ifndef SETCIRCUMFERENCE_H_
 #define SETCIRCUMFERENCE_H_
 
+#include "State.h"
+
+class SetCircumference: public State
+{
+	public:
+		SetCircumference();
+		void entryAction();
+		void exitAction();
+		State* accept(StateEvent ev);
+};
 
 #endif /* SETCIRCUMFERENCE_H_ */

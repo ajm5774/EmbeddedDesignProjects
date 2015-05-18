@@ -10,6 +10,15 @@
 #include "StateContext.h"
 #include <unistd.h>
 
+const int numThreads = 4;
+pthread_t * threads[numThreads];
+StateContext * context;
+
+typedef struct
+{
+	Control * control;
+} pthreadBundle;
+
 static void * controlWrapper(void * bund)
 {
 	ThreadCtl( _NTO_TCTL_IO, NULL );
@@ -45,7 +54,6 @@ void startControlThreads()
 
 int main(int argc, char *argv[]) {
 	context = new StateContext();
-	IOInit();
 	startControlThreads();
 
 	context->run();

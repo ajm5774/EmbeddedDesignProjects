@@ -19,7 +19,7 @@ void State::exitAction()
 {
 }
 
-std::string State::getStatusId()
+State* State::accept(StateEvent ev)
 {
-	return "";
+	return 0;
 }

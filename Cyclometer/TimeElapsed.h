@@ -8,5 +8,15 @@
 #ifndef TIMEELAPSED_H_
 #define TIMEELAPSED_H_
 
+#include "State.h"
+
+class TimeElapsed: public State
+{
+	public:
+		TimeElapsed();
+		void entryAction();
+		void exitAction();
+		State* accept(StateEvent ev);
+};
 
 #endif /* TIMEELAPSED_H_ */

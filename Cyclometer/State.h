@@ -8,19 +8,15 @@
 #ifndef STATE_H_
 #define STATE_H_
 
-#include <string>
-using namespace std;
+#include "StateEvents.h"
 
 class State
 {
 public:
-	//string statusId;
 	State();
-	virtual std::string getStatusId();
 	virtual void entryAction();
 	virtual void exitAction();
 	virtual State* accept(StateEvent ev);
-
 };
 
 #endif /* STATE_H_ */

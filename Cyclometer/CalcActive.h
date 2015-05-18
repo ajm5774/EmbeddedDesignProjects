@@ -8,5 +8,15 @@
 #ifndef CALCACTIVE_H_
 #define CALCACTIVE_H_
 
+#include "State.h"
+
+class CalcActive: public State
+{
+	public:
+		CalcActive();
+		void entryAction();
+		void exitAction();
+		State* accept(StateEvent ev);
+};
 
 #endif /* CALCACTIVE_H_ */

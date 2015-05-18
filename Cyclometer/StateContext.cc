@@ -6,7 +6,6 @@
  */
 
 #include "StateContext.h"
-#include <vector>
 #include <iostream>
 
 /*
@@ -33,13 +32,15 @@ void StateContext::queueEvent(StateEvent event)
 
 void StateContext::accept(StateEvent event)
 {
-	for(i=0; i < currentStates.length;i++)
+	int i;
+	State * transitionedState;
+	int currStateLen = (sizeof(currentStates)/sizeof(State*));
+	for(i=0; i < currStateLen;i++)
 	{
-		transitionedState = currentStates[i].accept(event);
+		transitionedState = currentStates[i]->accept(event);
 		currentStates[i]->exitAction();
 		currentStates[i] = transitionedState;
 		currentStates[i]->entryAction();
-		cout << "Moved to state: " << currentStates[i]->getStatusId()<< "\n";
 	}
 }
 

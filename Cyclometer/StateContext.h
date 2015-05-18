@@ -9,6 +9,7 @@
 #define STATECONTEXT_H_
 
 #include "State.h"
+#include <pthread.h>
 #include "StateEvents.h"
 #include <map>
 #include "ConcurrentQueue.h"
@@ -23,6 +24,7 @@ class StateContext {
 public:
 	StateContext();
 	void queueEvent(StateEvent event);
+	void accept(StateEvent event);
 	void run();
 
 private:

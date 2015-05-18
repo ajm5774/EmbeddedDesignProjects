@@ -8,5 +8,15 @@
 #ifndef INCREMENTAUTO_H_
 #define INCREMENTAUTO_H_
 
+#include "State.h"
+
+class IncrementAuto: public State
+{
+	public:
+		IncrementAuto();
+		void entryAction();
+		void exitAction();
+		State* accept(StateEvent ev);
+};
 
 #endif /* INCREMENTAUTO_H_ */
