@@ -27,13 +27,15 @@ public:
 
 //====other
 	//functions
-	void setWheelRot(bool wheelRot);
-
+	static void setWheelRot(bool wheelRot);
+	static void setAutoMode(bool isAutoMode);
 
 
 private:
 	Interrupt timer;
-	bool wheelRotated;
+	static bool wheelRotated;
+	static bool isAutoMode;
+	static bool wheelRotatedCleared;
 	pthread_mutex_t wheelRotLock;
 };
 

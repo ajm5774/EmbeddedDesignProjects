@@ -9,7 +9,7 @@ InterruptControl::InterruptControl(): Control()
 InterruptControl::InterruptControl(StateContext * aContext): Control(aContext)
 {
 	context = aContext;
-	CreateInterrupt(&timer, 200000, 0);//2 times a second
+	CreateInterrupt(&timer, 200000, 0);//5 times a second
 
 	out8( interCtrlHandle, INIT_BIT );
 	out8( clearHandle, CLEAR );
@@ -30,13 +30,65 @@ void InterruptControl::run()
 
 	for(;;){
 		MsgReceive(timer.chid, &pulse, sizeof(pulse), NULL);
+
+		//interrupt stuff
 		if (_pulseCount != _pulseHist)
 		{
 			_pulseHist = _pulseCount;
 		}
 		_pulseCount = 0;
+
+		//Buttons
+		lastInput = input;
+		input = in8(inputHandle);
+
+		if(lastInput != input)
+		{
+			if((input & FULL_OPEN_PIN_MASK) &&
+					!(lastInput & FULL_OPEN_PIN_MASK))
+				event = door_open;
+			if((input & FULL_CLOSED_PIN_MASK) &&
+					!(lastInput & FULL_CLOSED_PIN_MASK))
+				event = door_close;
+			if((input & IR_BROKEN_PIN_MASK) &&
+					!(lastInput & IR_BROKEN_PIN_MASK))
+				event = beam_interrupt;
+		}
 	}
 }
+
+bool InterruptControl::isButton1Pressed(uint8_t input){
+	return input & BOTTON1_PIN_MASK;
+}
+bool InterruptControl::isButton2Pressed(uint8_t input){
+	return input & BOTTON2_PIN_MASK;
+}
+bool InterruptControl::isButton3Pressed(uint8_t input){
+	return input & BOTTON3_PIN_MASK;
+}
+
+bool Interruptcontrol::button1BeenPressed(uint8_t lastInput)
+{
+	return lastInput & BOTTON1_PIN_MASK;
+}
+
+bool Interruptcontrol::button2BeenPressed(uint8_t lastInput)
+{
+	return lastInput & BOTTON2_PIN_MASK;
+}
+
+bool Interruptcontrol::button3BeenPressed(uint8_t lastInput)
+{
+	return lastInput & BOTTON3_PIN_MASK;
+}
+
+
+
+
+
+
+
+
 
 int InterruptControl::getCount()
 {

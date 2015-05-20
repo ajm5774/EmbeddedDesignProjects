@@ -45,7 +45,16 @@ private:
 	int _pulseCount;
 	int _pulseHist;
 	int _interruptID;
+	uint8_t input;
+	uint8_t lastInput;
 
+	bool isButton1Pressed(uint8_t input);
+	bool isButton2Pressed(uint8_t input);
+	bool isButton3Pressed(uint8_t input);
+
+	bool button1BeenPressed(uint8_t lastInput);
+	bool button2BeenPressed(uint8_t lastInput);
+	bool button3BeenPressed(uint8_t lastInput);
 };
 
 #endif /* INTERRUPTCONTROL_H_ */

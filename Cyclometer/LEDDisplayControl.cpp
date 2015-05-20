@@ -11,7 +11,7 @@ LEDDisplayControl::LEDDisplayControl(): Control()
 LEDDisplayControl::LEDDisplayControl(StateContext * aContext): Control(aContext)
 {
 	context = aContext;
-	CreateInterrupt(&timer, 50000, 0);//20 times a second
+	CreateInterrupt(&timer, 5000, 0);//20 times a second
 }
 
 void LEDDisplayControl::run()
@@ -19,8 +19,10 @@ void LEDDisplayControl::run()
 	struct _pulse pulse;
 	startInterrupt(&timer);
 	int segment = 0;
+
 	while(true)
 	{
+		MsgReceive(timer.chid, &pulse, sizeof(pulse), NULL);
 		Control::OUTPUTB = ConvertIntToDisplay(segValues[segment]);
 
 		if(segment == 0)
@@ -32,11 +34,8 @@ void LEDDisplayControl::run()
 		else if(segment == 3)
 			Control::OUTPUTA = (Control::OUTPUTA  & 0x10) | ANODE4_PIN_MASK;
 
-		//printf("%d - %d\n", Control::OUTPUTA, Control::OUTPUTB);
 		out8( Control::outputAHandle, Control::OUTPUTA );
 		out8( Control::outputBHandle, OUTPUTB );
-
-		usleep(10000);
 
 		segment++;
 		segment %= NUMSEGS;
