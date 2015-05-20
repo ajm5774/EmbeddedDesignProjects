@@ -10,6 +10,8 @@
 
 #include "StateContext.h"
 #include "Control.h"
+#include "Timer.h"
+#include <stdio.h>
 
 
 class LEDControl: public Control
@@ -26,16 +28,18 @@ public:
 	virtual void run();
 
 //====other
+	static bool wheelRotated;
+	static bool isAutoMode;
+	static bool wheelRotatedCleared;
+
 	//functions
-	static void setWheelRot(bool wheelRot);
-	static void setAutoMode(bool isAutoMode);
+	void setWheelRot(bool wheelRot);
+	void setAutoMode(bool isAutoMode);
 
 
 private:
 	Interrupt timer;
-	static bool wheelRotated;
-	static bool isAutoMode;
-	static bool wheelRotatedCleared;
+
 	pthread_mutex_t wheelRotLock;
 };
 

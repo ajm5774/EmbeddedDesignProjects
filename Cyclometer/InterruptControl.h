@@ -11,6 +11,7 @@
 #include "StateContext.h"
 #include "StateEvents.h"
 #include "Control.h"
+#include "LEDControl.h"
 #include "Timer.h"
 #include <stdio.h>
 #include <sys/neutrino.h>
@@ -42,11 +43,16 @@ public:
 
 private:
 	Interrupt timer;
+	int waitTimeMicros;
 	int _pulseCount;
 	int _pulseHist;
 	int _interruptID;
 	uint8_t input;
 	uint8_t lastInput;
+
+	bool awaitingReset;
+	bool awaitingResetVals;
+	int waitCount;
 
 	bool isButton1Pressed(uint8_t input);
 	bool isButton2Pressed(uint8_t input);

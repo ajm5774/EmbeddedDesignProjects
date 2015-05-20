@@ -41,11 +41,12 @@ static void * controlWrapper(void * bund)
 void startControlThreads()
 {
 	int i;
-	int numControls = 2;
+	int numControls = 3;
 
 	LEDDisplayControl * ledD = new LEDDisplayControl(context);
-	InterruptControl * led = new InterruptControl(context);
-	Control * controls[] = {led, ledD};
+	InterruptControl * interrupt = new InterruptControl(context);
+	LEDControl * led = new LEDControl(context);
+	Control * controls[] = {led, ledD, interrupt};
 
 
 	pthread_attr_t threadAttributes ;

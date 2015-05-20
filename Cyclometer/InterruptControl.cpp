@@ -9,12 +9,18 @@ InterruptControl::InterruptControl(): Control()
 InterruptControl::InterruptControl(StateContext * aContext): Control(aContext)
 {
 	context = aContext;
-	CreateInterrupt(&timer, 200000, 0);//5 times a second
+
+	waitTimeMicros = 200000;
+	CreateInterrupt(&timer, waitTimeMicros, 0);//5 times a second
 
 	out8( interCtrlHandle, INIT_BIT );
 	out8( clearHandle, CLEAR );
 
 	_pulseHist = 0;
+	awaitingReset = false;
+	awaitingResetVals = false;
+	waitCount = 0;
+
 }
 
 void InterruptControl::run()
@@ -27,6 +33,14 @@ void InterruptControl::run()
 
 	struct _pulse pulse;
 	startInterrupt(&timer);
+
+	bool b1Pressed = false;
+	bool b2Pressed = false;
+	bool b3Pressed = false;
+
+	bool b1BeenPressed = false;
+	bool b2BeenPressed = false;
+	bool b3BeenPressed = false;
 
 	for(;;){
 		MsgReceive(timer.chid, &pulse, sizeof(pulse), NULL);
@@ -42,18 +56,95 @@ void InterruptControl::run()
 		lastInput = input;
 		input = in8(inputHandle);
 
-		if(lastInput != input)
+		b1Pressed = isButton1Pressed(input);
+		b2Pressed = isButton2Pressed(input);
+		b3Pressed = isButton3Pressed(input);
+
+		b1BeenPressed = button1BeenPressed(lastInput);//set
+		b2BeenPressed = button2BeenPressed(lastInput);//startstop
+		b3BeenPressed = button3BeenPressed(lastInput);//mode
+
+		//all 3 buttons down - check reset
+		if(b1Pressed && b2Pressed && b3Pressed)
 		{
-			if((input & FULL_OPEN_PIN_MASK) &&
-					!(lastInput & FULL_OPEN_PIN_MASK))
-				event = door_open;
-			if((input & FULL_CLOSED_PIN_MASK) &&
-					!(lastInput & FULL_CLOSED_PIN_MASK))
-				event = door_close;
-			if((input & IR_BROKEN_PIN_MASK) &&
-					!(lastInput & IR_BROKEN_PIN_MASK))
-				event = beam_interrupt;
+			if(!awaitingReset)
+				waitCount = 0;
+			waitCount++;
+			awaitingReset = true;
+
+			//reset if they have been down for 2 seconds
+			if((waitCount * waitTimeMicros) >= 2000000)
+			{
+				context->queueEvent(reset);
+				waitCount = 0;
+			}
 		}
+		//mode + start/stop pressed
+		else if(b2Pressed && b3Pressed)
+		{
+			if(!awaitingResetVals)
+				waitCount = 0;
+			waitCount++;
+			awaitingResetVals = true;
+
+			//reset if they have been down for 2 seconds
+			if((waitCount * waitTimeMicros) >= 2000000)
+			{
+				//TODO reset trip vals
+				printf("reset trip values");
+				waitCount = 0;
+			}
+		}
+		else if(b1Pressed)
+		{
+			if(!b1BeenPressed)
+				waitCount = 0;
+			else if(waitCount * waitTimeMicros >= 200000)
+				context->queueEvent(set_pressed);
+			waitCount++;
+		}
+		else if(b2Pressed)
+		{
+			if(!b2BeenPressed)
+				waitCount = 0;
+			else if(waitCount * waitTimeMicros >= 200000)
+				context->queueEvent(stop_start_pressed);
+			waitCount++;
+		}
+		else if(b3Pressed)
+		{
+			if(!b3BeenPressed)
+				waitCount = 0;
+			else if(waitCount * waitTimeMicros >= 200000)
+				context->queueEvent(mode_pressed);
+			waitCount++;
+		}
+		else
+		{
+			//detect quick button presses
+			if(waitCount * waitTimeMicros <= 200000)
+			{
+				if(b1BeenPressed)
+				{
+					context->queueEvent(set_pressed);
+					LEDControl::isAutoMode = !LEDControl::isAutoMode;
+				}
+				else if(b2BeenPressed)
+				{
+					context->queueEvent(stop_start_pressed);
+					LEDControl::wheelRotated = true;
+				}
+				else if(b3BeenPressed)
+					context->queueEvent(mode_pressed);
+			}
+			awaitingReset = false;
+			awaitingResetVals = false;
+			waitCount = 0;
+		}
+
+
+
+
 	}
 }
 
@@ -67,17 +158,17 @@ bool InterruptControl::isButton3Pressed(uint8_t input){
 	return input & BOTTON3_PIN_MASK;
 }
 
-bool Interruptcontrol::button1BeenPressed(uint8_t lastInput)
+bool InterruptControl::button1BeenPressed(uint8_t lastInput)
 {
 	return lastInput & BOTTON1_PIN_MASK;
 }
 
-bool Interruptcontrol::button2BeenPressed(uint8_t lastInput)
+bool InterruptControl::button2BeenPressed(uint8_t lastInput)
 {
 	return lastInput & BOTTON2_PIN_MASK;
 }
 
-bool Interruptcontrol::button3BeenPressed(uint8_t lastInput)
+bool InterruptControl::button3BeenPressed(uint8_t lastInput)
 {
 	return lastInput & BOTTON3_PIN_MASK;
 }

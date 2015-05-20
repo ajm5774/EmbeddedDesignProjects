@@ -16,7 +16,8 @@ enum StateEvent
 	set_pressed = 2,
 	mode_pressed = 3,
 	reset = 4,
-	wheel_rotated = 5
+	wheel_rotated = 5,
+	increment_display
 };
 
 #endif /* STATEEVENTS_H_ */
