@@ -11,12 +11,10 @@
 #include "StateContext.h"
 #include "Control.h"
 
-
-class CalculationControl: public Control
-{
+class CalculationControl: public Control {
 public:
 
-//====inherited
+	//====inherited
 	//variables
 	StateContext * context;
 
@@ -25,7 +23,7 @@ public:
 	CalculationControl(StateContext * context);
 	virtual void run();
 
-//====other
+	//====other
 	time_t currentTime;
 	time_t timeLastCalc;
 	time_t startTime;
@@ -36,8 +34,8 @@ public:
 	int wheelCircumCM;
 	Mode unitMode;
 	mutex calcLock;
-	int numRots; 		//needs lock
-	bool performCalcs;	//needs lock
+	int numRots; //needs lock
+	bool performCalcs; //needs lock
 
 private:
 	Interrupt timer;
@@ -50,6 +48,12 @@ private:
 	void performCalcs();
 	void reInit();
 
+};
+
+class CalculationControl {
+public:
+	CalculationControl();
+	virtual ~CalculationControl();
 };
 
 #endif /* CALCULATIONCONTROL_H_ */
