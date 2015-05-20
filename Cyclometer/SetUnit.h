@@ -9,6 +9,8 @@
 #define SETUNIT_H_
 
 #include "State.h"
+#include "StateEvents.h"
+#include "StateContext.h"
 
 class SetUnit: public State
 {

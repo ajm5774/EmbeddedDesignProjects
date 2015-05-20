@@ -12,6 +12,7 @@
 #include "Control.h"
 #include "Timer.h"
 #include <stdio.h>
+#include "Modes.h"
 
 
 class LEDControl: public Control
@@ -31,6 +32,7 @@ public:
 	static bool wheelRotated;
 	static bool isAutoMode;
 	static bool wheelRotatedCleared;
+	static Mode unitMode;
 
 	//functions
 	void setWheelRot(bool wheelRot);

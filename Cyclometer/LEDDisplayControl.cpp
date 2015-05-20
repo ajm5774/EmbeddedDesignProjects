@@ -2,6 +2,7 @@
 #include "LEDDisplayControl.h"
 
 uint8_t LEDDisplayControl::segValues[] = {4,5,6,7};
+bool showDP[] = {false,false,false,false};
 
 LEDDisplayControl::LEDDisplayControl(): Control()
 {
@@ -11,7 +12,7 @@ LEDDisplayControl::LEDDisplayControl(): Control()
 LEDDisplayControl::LEDDisplayControl(StateContext * aContext): Control(aContext)
 {
 	context = aContext;
-	CreateInterrupt(&timer, 5000, 0);//20 times a second
+	CreateInterrupt(&timer, 7000, 0);//20 times a second
 }
 
 void LEDDisplayControl::run()
@@ -41,6 +42,47 @@ void LEDDisplayControl::run()
 		segment %= NUMSEGS;
 	}
 }
+
+void LEDDisplayControl::SetDisplayVals()
+{
+	if(displayMode == SPEED)
+	{
+
+	}
+	else if(displayMode == DISTANCE)
+	{
+
+	}
+	else if(displayMode == ELAPSED_TIME)
+	{
+
+	}
+	else if(displayMode == SELECT_UNITS)
+	{
+
+	}
+	else if(displayMode == SELECT_TIRE_SIZE)
+	{
+
+	}
+}
+
+void LEDDisplayControl::GetDisplayDigits(float val, int numDigits, bool showDec)
+{
+
+}
+
+void LEDDisplayControl::GetDisplayDigits(int val, int numDigits)
+{
+	int i;
+	int tempVal;
+	for(i = 0;i < numDigits;i++)
+	{
+		segValues[i] =
+	}
+}
+
+
 
 uint8_t LEDDisplayControl::ConvertIntToDisplay(uint8_t digit)
 {

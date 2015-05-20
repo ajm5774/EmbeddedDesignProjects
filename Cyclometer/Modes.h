@@ -15,7 +15,9 @@ enum Mode
 	SPEED = 3,
 	DISTANCE = 4,
 	ELAPSED_TIME = 5,
-	INVALID = 6,
+	SELECT_UNITS = 6,
+	SELECT_TIRE_SIZE = 7,
+	INVALID = 8
 };
 
 #endif /* MODES_H_ */

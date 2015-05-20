@@ -26,12 +26,14 @@
 #define ANODE4 				3
 #define LED1 				4
 #define LED2 				5
-#define ANODE1_PIN_MASK 	0x07
-#define ANODE2_PIN_MASK 	0x0B
-#define ANODE3_PIN_MASK 	0x0D
-#define ANODE4_PIN_MASK 	0x0E
+#define LED3 				6
+#define ANODE1_PIN_MASK 	0x07//0111
+#define ANODE2_PIN_MASK 	0x0B//1011
+#define ANODE3_PIN_MASK 	0x0D//1101
+#define ANODE4_PIN_MASK 	0x0E//1110
 #define LED1_PIN_MASK 		0x10
 #define LED2_PIN_MASK 		0x20
+#define LED3_PIN_MASK 		0x40
 
 //PB Outputs - B
 #define DAQ_OUTPUTB			DAQ_BASE+9

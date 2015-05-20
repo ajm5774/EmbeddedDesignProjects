@@ -10,6 +10,12 @@
 
 #include "StateContext.h"
 #include "Control.h"
+#include "Modes.h"
+#include "Timer.h"
+#include <time.h>
+#include <ctime>
+#include <stdio.h>
+using namespace std;
 
 class CalculationControl: public Control {
 public:
@@ -24,18 +30,20 @@ public:
 	virtual void run();
 
 	//====other
-	time_t currentTime;
-	time_t timeLastCalc;
-	time_t startTime;
-	time_t elapsedTime;
+	clock_t currentTime;
+	clock_t timeLastCalc;
+	float millisSinceLastCalc;
+	clock_t startTime;
+	float elapsedMillis;
 	float currentSpeed;
 	float averageSpeed;
-	float distance;
+	float distanceKM;
+	float distanceLastCalcKM;
 	int wheelCircumCM;
 	Mode unitMode;
-	mutex calcLock;
+	pthread_mutex_t calcLock;
 	int numRots; //needs lock
-	bool performCalcs; //needs lock
+	bool bPerformCalcs; //needs lock
 
 private:
 	Interrupt timer;
@@ -44,16 +52,11 @@ private:
 	void calcCurrentSpeed();
 	void calcAverageSpeed();
 	void calcDistance();
-	void calcElapsedTime();
+	void calcDistanceLastCalc();
 	void performCalcs();
+	float getMilliDiff(clock_t bigClock, clock_t smallClock);
 	void reInit();
 
-};
-
-class CalculationControl {
-public:
-	CalculationControl();
-	virtual ~CalculationControl();
 };
 
 #endif /* CALCULATIONCONTROL_H_ */

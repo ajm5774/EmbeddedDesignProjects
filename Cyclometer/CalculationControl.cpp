@@ -1,119 +1,87 @@
-/*
- * CalculationControl.cpp
- *
- *  Created on: May 19, 2015
- *      Author: msa3600
- */
-
-
-
-
 #include "CalculationControl.h"
-#include <unistd.h>
-#include <stdint.h>
-#include <sys/mman.h>
-#include <sys/neutrino.h>
-#include <hw/inout.h>
-#include <math.h>
 
-
-
-uintptr_t ctrlCAHandle;
-uint8_t cycles;
-uint8_t distanceCycles;
-
-
-
-CalculationControl::CalculationControl() {
-	// TODO Auto-generated constructor stub
+CalculationControl::CalculationControl()
+{
 
 }
 
-CalculationControl::~CalculationControl() {
-	// TODO Auto-generated destructor stub
+CalculationControl::CalculationControl(StateContext * context)
+{
+	reInit();
+	unitMode = 			MPH;
+	bPerformCalcs = 	false;
+	pthread_mutex_init(&calcLock, NULL);
 }
 
+void CalculationControl::run()
+{
+	struct _pulse pulse;
+	startInterrupt(&timer);
 
+	while(true)
+	{
+		MsgReceive(timer.chid, &pulse, sizeof(pulse), NULL);
 
-void CalculationControl::entry(){
-}
-
-void CalculationControl::exit(){
-}
-
-
-void* CalculationControl::runCProcess(void){
-
-
-	while (true){
-		cycles = in8(ctrlCAHandle);
-			if(gotCycle==0 && (cycles )){
-					gotCycle++;
-					cycleCount++;
-					cycling = true;
-					if(calculate){
-						distanceTraveled =  distanceTraveled + (speed * ((((float)elapsedMinuets*2) + (float)elapsedSeconds)/3600.0));
-
-						avSpeed = (avSpeed * ((float) cycleCount / ((float)cycleCount + 1))) + (speed * ( 1 / ((float)cycleCount+1)));
-
-					}
-			}else if( gotCycle == 1 && !(cycles )){
-						gotCycle--;
-					}
-			else{
-				nanosleep(&ctsim, NULL);
-				}
-				}
-
-	return NULL;
-}
-
-
-void* CalculationControl::runProcessSpeed(void){
-	while(true){
-				int curr = cycleCount - prevCycleCount;
-				if (curr!=0){
-					stoped = 0;
-					speed = (float)circumference / 100000;
-					speed = speed * (float)curr * 3600;
-					if(khm){
-					}else{
-						speed = speed * .621371192;
-						avSpeed = avSpeed * .621371192;
-					}
-				prevCycleCount=cycleCount;
-				sleep(1);
-
-		}
-	return NULL;
-}
-
-void* CalculationControl::runProcessTime(void){
-	while(true){
-		if(calculate == true){
-			if(cycling == true){
-				sleep(1);
-				if (elapsedSeconds==59){
-					elapsedSeconds = 0;
-					elapsedMinuets++;
-				}else{
-					elapsedSeconds++;
-				}
-			}}else{
-			sleep(.5);
-		}
+		if(bPerformCalcs)
+			performCalcs();
 	}
+}
 
-	return NULL;}
+void CalculationControl::calcCurrentSpeed(){
+	float distance = distanceLastCalcKM;
+	if(unitMode == MPH)
+		distance *= .621371;//convert from km to miles
+
+	currentSpeed = distance/millisSinceLastCalc*1000;
+}
+
+void CalculationControl::calcAverageSpeed(){
+	float distance = distanceKM;
+	if(unitMode == MPH)
+		distance *= .621371;//convert from km to miles
+
+	averageSpeed = distance/elapsedMillis*1000;
+}
+
+void CalculationControl::calcDistance(){
+	distanceKM += distanceLastCalcKM;
+}
+
+void CalculationControl::calcDistanceLastCalc(){
+	distanceLastCalcKM = (wheelCircumCM * numRots)/100000;
+	numRots = 0;
+}
+
+void CalculationControl::performCalcs(){
+	//get times
+	currentTime = clock();
+	millisSinceLastCalc = getMilliDiff(currentTime, timeLastCalc);
+	elapsedMillis = getMilliDiff(currentTime, startTime);
+
+	calcDistanceLastCalc();//this calc must come first
+	calcDistance();
+	calcCurrentSpeed();
+	calcAverageSpeed();
+	calcDistance();
+	timeLastCalc = clock();
+}
+
+float CalculationControl::getMilliDiff(clock_t bigClock, clock_t smallClock)
+{
+	return (float)(1000.0 * (bigClock-smallClock) / CLOCKS_PER_SEC);
+}
 
 void CalculationControl::reInit(){
-	elapsedSeconds =0;
-	elapsedMinuets=0;
-	cycleCount =0;
-	prevCycleCount =0;
-	speed =0;
-	avSpeed =0;
-	distanceTraveled = 0;
-	exit();
+	currentTime = 		clock();
+	startTime = 		clock();
+	timeLastCalc = 		clock();
+	elapsedMillis = 	0.0;
+	millisSinceLastCalc = 0.0;
 
+	currentSpeed = 		0.0;
+	averageSpeed = 		0.0;
+	distanceKM = 		0.0;
+	distanceLastCalcKM= 0.0;
+	wheelCircumCM = 	190;
+	numRots = 			0;
 }

@@ -35,6 +35,7 @@ public:
 //====other
 	//variables
 	static uint8_t segValues[];
+	static bool showDP[];
 	Mode displayMode;
 
 private:

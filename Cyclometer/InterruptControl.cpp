@@ -127,12 +127,10 @@ void InterruptControl::run()
 				if(b1BeenPressed)
 				{
 					context->queueEvent(set_pressed);
-					LEDControl::isAutoMode = !LEDControl::isAutoMode;
 				}
 				else if(b2BeenPressed)
 				{
 					context->queueEvent(stop_start_pressed);
-					LEDControl::wheelRotated = true;
 				}
 				else if(b3BeenPressed)
 					context->queueEvent(mode_pressed);

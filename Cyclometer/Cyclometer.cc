@@ -12,6 +12,7 @@
 #include "LEDDisplayControl.h"
 #include "LEDControl.h"
 #include "InterruptControl.h"
+#include "CalculationControl.h"
 #include <unistd.h>
 #include <sys/neutrino.h>
 #include <sys/mman.h>
@@ -19,6 +20,11 @@
 const int numThreads = 4;
 pthread_t * threads[numThreads];
 StateContext * context;
+
+CalculationControl * calcControl;
+LEDDisplayControl * ledDisplayControl;
+InterruptControl * intControl;
+LEDControl * ledControl;
 
 typedef struct
 {
@@ -41,12 +47,13 @@ static void * controlWrapper(void * bund)
 void startControlThreads()
 {
 	int i;
-	int numControls = 3;
+	int numControls = 4;
 
-	LEDDisplayControl * ledD = new LEDDisplayControl(context);
-	InterruptControl * interrupt = new InterruptControl(context);
-	LEDControl * led = new LEDControl(context);
-	Control * controls[] = {led, ledD, interrupt};
+	ledDisplayControl = new LEDDisplayControl(context);
+	intControl = new InterruptControl(context);
+	ledControl = new LEDControl(context);
+	calcControl = new CalculationControl(context);
+	Control * controls[] = {ledDisplayControl, intControl, ledControl, calcControl};
 
 
 	pthread_attr_t threadAttributes ;

@@ -1,7 +1,26 @@
-/*
- * SetUnit.cpp
- *
- *  Created on: May 7, 2015
- *      Author: ajm5774
- */
+#include "SetUnit.h"
 
+SetUnit::SetUnit() : State()
+{
+
+}
+void SetUnit::entryAction()
+{
+
+}
+
+void SetUnit::exitAction()
+{
+
+}
+
+State* SetUnit::accept(StateEvent ev)
+{
+	if(ev == set_pressed)
+		return new SetCircumference();
+	else if(ev == mode_pressed)
+	{
+
+	}
+
+}
