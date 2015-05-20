@@ -1,4 +1,5 @@
 #include <cstdlib>
+#include <stdio.h>
 #include <iostream>
 #include <pthread.h>
 #include <iostream>
@@ -8,7 +9,12 @@
 #include "StateEvents.h"
 #include "Control.h"
 #include "StateContext.h"
+#include "LEDDisplayControl.h"
+#include "LEDControl.h"
+#include "InterruptControl.h"
 #include <unistd.h>
+#include <sys/neutrino.h>
+#include <sys/mman.h>
 
 const int numThreads = 4;
 pthread_t * threads[numThreads];
@@ -21,7 +27,13 @@ typedef struct
 
 static void * controlWrapper(void * bund)
 {
-	ThreadCtl( _NTO_TCTL_IO, NULL );
+	int privity_err;
+	privity_err = ThreadCtl( _NTO_TCTL_IO, NULL );
+	if ( privity_err == -1)
+	{
+		printf( "Can't get root permissions\n");
+	}
+
 	((pthreadBundle *) bund)->control->run();
 	return NULL;
 }
@@ -31,7 +43,9 @@ void startControlThreads()
 	int i;
 	int numControls = 2;
 
-	Control * controls[] = {};
+	LEDDisplayControl * ledD = new LEDDisplayControl(context);
+	InterruptControl * led = new InterruptControl(context);
+	Control * controls[] = {led, ledD};
 
 
 	pthread_attr_t threadAttributes ;
@@ -52,8 +66,38 @@ void startControlThreads()
 	}
 }
 
+void IOInit()
+{
+	ThreadCtl( _NTO_TCTL_IO, NULL );
+
+	if ( Control::ctrlHandle == MAP_DEVICE_FAILED ) {
+		perror( "control map failed" );
+	}
+	if ( Control::inputHandle == MAP_DEVICE_FAILED ) {
+		perror( "input map failed" );
+	}
+	if ( Control::outputAHandle == MAP_DEVICE_FAILED ) {
+		perror( "output A map failed" );
+	}
+	if ( Control::outputBHandle == MAP_DEVICE_FAILED ) {
+		perror( "output B map failed" );
+	}
+	if ( Control::interCtrlHandle == MAP_DEVICE_FAILED ) {
+		perror( "interrupt control map failed" );
+	}
+	if ( Control::clearHandle == MAP_DEVICE_FAILED ) {
+		perror( "interrupt clear map failed" );
+	}
+
+	//set IO direction
+	out8(Control::ctrlHandle, CTRL_INIT);
+
+
+}
+
 int main(int argc, char *argv[]) {
 	context = new StateContext();
+	IOInit();
 	startControlThreads();
 
 	context->run();

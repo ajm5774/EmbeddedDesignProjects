@@ -34,7 +34,7 @@ public:
 private:
 	Interrupt timer;
 	bool wheelRotated;
-	mutex wheelRotLock;
+	pthread_mutex_t wheelRotLock;
 };
 
 #endif /* LEDCONTROL_H_ */

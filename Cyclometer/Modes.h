@@ -8,7 +8,7 @@
 #ifndef MODES_H_
 #define MODES_H_
 
-enum Modes
+enum Mode
 {
 	KPH = 1,
 	MPH = 2,

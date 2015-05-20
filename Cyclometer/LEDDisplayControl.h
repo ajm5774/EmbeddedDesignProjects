@@ -10,6 +10,13 @@
 
 #include "StateContext.h"
 #include "Control.h"
+#include <stdio.h>
+#include <unistd.h>
+#include "Timer.h"
+#include "Modes.h"
+
+#define NUMSEGS 4
+
 
 
 class LEDDisplayControl: public Control
@@ -27,15 +34,12 @@ public:
 
 //====other
 	//variables
-	int seg1Value;
-	int seg2Value;
-	int seg3Value;
-	int seg4Value;
-
+	static uint8_t segValues[];
 	Mode displayMode;
 
 private:
 	Interrupt timer;
+	uint8_t ConvertIntToDisplay(uint8_t digit);
 };
 
 #endif /* LEDDISPLAYCONTROL_H_ */

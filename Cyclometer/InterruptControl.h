@@ -11,7 +11,13 @@
 #include "StateContext.h"
 #include "StateEvents.h"
 #include "Control.h"
+#include "Timer.h"
+#include <stdio.h>
+#include <sys/neutrino.h>
 
+
+
+const struct sigevent * interruptReceived(void *arg, int id);
 
 class InterruptControl: public Control
 {
@@ -27,18 +33,18 @@ public:
 	virtual void run();
 
 //====other
-	//variables
-	uint8_t input = 0;
-	uint8_t lastInput = 0;
-	StateEvent event;
-
 	//functions
-	void handleModePressed();
-	void handleSetPressed();
-	void handleMagSensorTriggered();
+	int getCount();
+	void updateCount();
+
+	//variables
+	StateEvent event;
 
 private:
 	Interrupt timer;
+	int _pulseCount;
+	int _pulseHist;
+	int _interruptID;
 
 };
 

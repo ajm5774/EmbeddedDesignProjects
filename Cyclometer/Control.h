@@ -18,51 +18,76 @@
 #define DAQ_BASE 0x280
 #define PORT_LENGTH 		1
 
-//PB Inputs - A
-#define DAQ_INPUT 			DAQ_BASE+8
-#define FULL_OPEN_PIN 		0
-#define FULL_CLOSED_PIN 	1
-#define IR_BROKEN_PIN 		2
-#define OVERCURRENT_PIN 	3
-#define REMOTE_PIN 			4
-#define FULL_OPEN_PIN_MASK 		0x01
-#define FULL_CLOSED_PIN_MASK 	0x02
-#define IR_BROKEN_PIN_MASK 		0x04
-#define OVERCURRENT_PIN_MASK 	0x08
-#define REMOTE_PIN_MASK 		0x10
+//PB Outputs - A
+#define DAQ_OUTPUTA 		DAQ_BASE+8
+#define ANODE1 				0
+#define ANODE2 				1
+#define ANODE3 				2
+#define ANODE4 				3
+#define LED1 				4
+#define LED2 				5
+#define ANODE1_PIN_MASK 	0x07
+#define ANODE2_PIN_MASK 	0x0B
+#define ANODE3_PIN_MASK 	0x0D
+#define ANODE4_PIN_MASK 	0x0E
+#define LED1_PIN_MASK 		0x10
+#define LED2_PIN_MASK 		0x20
 
 //PB Outputs - B
-#define DAQ_OUTPUT DAQ_BASE+9
-#define MOTOR_UP_PIN 		0
-#define MOTOR_DOWN_PIN 		1
-#define IR_BEAM_ON 			2
-#define RESET_SIM 			3
-#define MOTOR_UP_PIN_MASK 		0x01
-#define MOTOR_DOWN_PIN_MASK 	0x02
-#define IR_BEAM_ON_MASK 		0x04
-#define RESET_SIM_MASK 			0x08
+#define DAQ_OUTPUTB			DAQ_BASE+9
+#define SEGMENTA 			0
+#define SEGMENTB 			1
+#define SEGMENTC 			2
+#define SEGMENTD 			3
+#define SEGMENTE 			4
+#define SEGMENTF 			5
+#define SEGMENTG 			6
+#define SEGMENTDP 			7
+#define SEGMENTA_PIN_MASK 	0x01
+#define SEGMENTB_PIN_MASK 	0x02
+#define SEGMENTC_PIN_MASK 	0x04
+#define SEGMENTD_PIN_MASK 	0x08
+#define SEGMENTE_PIN_MASK 	0x10
+#define SEGMENTF_PIN_MASK 	0x20
+#define SEGMENTG_PIN_MASK 	0x40
+#define SEGMENTDP_PIN_MASK 	0x80
 
+//PB Inputs - C
+#define DAQ_INPUT 			DAQ_BASE+10
+#define BOTTON1 			0
+#define BOTTON2 			1
+#define BOTTON3 			2
+#define BOTTON1_PIN_MASK 	0x01
+#define BOTTON2_PIN_MASK 	0x02
+#define BOTTON3_PIN_MASK 	0x04
+
+//interrupt clear
+#define DAQ_CLEAR  			DAQ_BASE + 0
+#define CLEAR          		0x02
+#define DIO_IRQ        		0x05
+
+//interrupt control
+#define DAQ_INTER_CTRL  	DAQ_BASE + 4
+#define INIT_BIT       		0x02
 
 //IO CTRL
 #define DAQ_CTRL 			DAQ_BASE+11
-#define CTRL_INIT 			0x10
-
-//Interrupts
-//#define INTERRUPT_CTRL		DAQ_BASE+4
-//#define IRQ_ENABLE			0x02
-//#define IRQ4 				4
+#define CTRL_INIT 			0x09
 
 class Control
 {
 public:
-	static char OUTPUT;
+	static uint8_t OUTPUTA;
+	static uint8_t OUTPUTB;
 	StateContext * context;
 	Control();
 	Control(StateContext * context);
 	static uintptr_t inputHandle;
-	static uintptr_t outputHandle;
+	static uintptr_t outputAHandle;
+	static uintptr_t outputBHandle;
 	static uintptr_t ctrlHandle;
-	static uintptr_t interHandle;
+	static uintptr_t interCtrlHandle;
+	static uintptr_t clearHandle;
 	virtual void run();
 };
 
