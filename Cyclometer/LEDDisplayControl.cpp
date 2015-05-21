@@ -13,6 +13,7 @@ LEDDisplayControl::LEDDisplayControl(StateContext * aContext): Control(aContext)
 {
 	context = aContext;
 	CreateInterrupt(&timer, 7000, 0);//20 times a second
+	displayMode = SELECT_UNITS;
 }
 
 void LEDDisplayControl::run()
@@ -47,38 +48,63 @@ void LEDDisplayControl::SetDisplayVals()
 {
 	if(displayMode == SPEED)
 	{
-
+		SetDisplayDigits(calcControl->currentSpeed, 2, 0);
+		SetDisplayDigits(calcControl->averageSpeed, 2, 2);
 	}
 	else if(displayMode == DISTANCE)
 	{
-
+		if(calcControl->unitMode == KMH)
+			SetDisplayDigits(calcControl->distanceKM, 4, 0);
+		else
+			SetDisplayDigits(calcControl->distanceKM * kmhToMph, 4, 0);
 	}
 	else if(displayMode == ELAPSED_TIME)
 	{
+		int seconds = calcControl->elapsedMillis/1000 % 60;
+		int minutes = calcControl->elapsedMillis/1000/60;
 
+		SetDisplayDigits(seconds, 2, 0);
+		SetDisplayDigits(minutes, 2, 2);
 	}
-	else if(displayMode == SELECT_UNITS)
-	{
 
+	//moved this to the states
+	/*else if(displayMode == SELECT_UNITS)
+	{
+		SetDisplayDigits((int)(calcControl->unitMode), 4, 0);
 	}
 	else if(displayMode == SELECT_TIRE_SIZE)
 	{
+		SetDisplayDigits(wheelCircumCM, 4, 0);
+	}*/
+}
 
+void LEDDisplayControl::SetDisplayDigits(float val, int numDigits, int startIndex)
+{
+	if(val < pow(10, numDigits))
+	{
+		segValues[startIndex] = int(val*10) - int(val) * 10;
+		SetDisplayDigits(int(val), numDigits, startIndex + 1);
+	}
+	else
+	{
+		SetDisplayDigits(int(val), numDigits, )
 	}
 }
 
-void LEDDisplayControl::GetDisplayDigits(float val, int numDigits, bool showDec)
+void LEDDisplayControl::SetDisplayDigits(int val, int numDigits, int startIndex)
 {
+	//limit the inputs
+	if(numDigits + startIndex > 4)
+		numDigits = 4 - startIndex;
 
-}
-
-void LEDDisplayControl::GetDisplayDigits(int val, int numDigits)
-{
+	val = val%1000;//max value of 999
+	
 	int i;
-	int tempVal;
-	for(i = 0;i < numDigits;i++)
+	int divisor = 1;
+	for(i = 0; i < numDigits; i++)
 	{
-		segValues[i] =
+		segValues[i + startIndex] = val % (divisor*10)/divisor;
+		divisor *= 10;
 	}
 }
 

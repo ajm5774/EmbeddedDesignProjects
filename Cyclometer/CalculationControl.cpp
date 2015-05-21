@@ -10,6 +10,7 @@ CalculationControl::CalculationControl(StateContext * context)
 	reInit();
 	unitMode = 			MPH;
 	bPerformCalcs = 	false;
+	kmhToMph=			.621371;
 	pthread_mutex_init(&calcLock, NULL);
 }
 

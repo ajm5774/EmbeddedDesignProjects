@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include "Timer.h"
 #include "Modes.h"
+#include <math.h>
 
 #define NUMSEGS 4
 

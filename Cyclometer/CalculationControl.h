@@ -44,6 +44,7 @@ public:
 	pthread_mutex_t calcLock;
 	int numRots; //needs lock
 	bool bPerformCalcs; //needs lock
+	float kmhToMph
 
 private:
 	Interrupt timer;

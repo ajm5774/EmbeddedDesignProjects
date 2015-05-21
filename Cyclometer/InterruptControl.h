@@ -54,6 +54,7 @@ private:
 	bool awaitingReset;
 	bool awaitingResetVals;
 	int waitCount;
+	int modeHeldWaitCount;
 
 	bool isButton1Pressed(uint8_t input);
 	bool isButton2Pressed(uint8_t input);

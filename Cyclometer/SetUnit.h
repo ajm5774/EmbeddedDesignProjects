@@ -11,6 +11,7 @@
 #include "State.h"
 #include "StateEvents.h"
 #include "StateContext.h"
+#include "Modes.h"
 
 class SetUnit: public State
 {
@@ -19,6 +20,8 @@ class SetUnit: public State
 		void entryAction();
 		void exitAction();
 		State* accept(StateEvent ev);
+
+		Mode unitMode;
 };
 
 #endif /* SETUNIT_H_ */

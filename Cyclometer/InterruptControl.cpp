@@ -20,6 +20,7 @@ InterruptControl::InterruptControl(StateContext * aContext): Control(aContext)
 	awaitingReset = false;
 	awaitingResetVals = false;
 	waitCount = 0;
+	modeHeldWaitCount = 0;
 
 }
 
@@ -115,7 +116,16 @@ void InterruptControl::run()
 		{
 			if(!b3BeenPressed)
 				waitCount = 0;
-			else if(waitCount * waitTimeMicros >= 200000)
+			else if (waitCount * waitTimeMicros >= 2000000)//2sec
+			{
+				modeHeldWaitCount++;
+				if(modeHeldWaitCount * waitTimeMicros >= 1000000)//1 sec
+				{
+					context->queueEvent(increment_tire_size);
+					modeHeldWaitCount = 0;
+				}
+			}
+			else if(waitCount * waitTimeMicros >= 200000)//.2sec
 				context->queueEvent(mode_pressed);
 			waitCount++;
 		}
@@ -138,6 +148,7 @@ void InterruptControl::run()
 			awaitingReset = false;
 			awaitingResetVals = false;
 			waitCount = 0;
+			modeHeldWaitCount = 0;
 		}
 
 

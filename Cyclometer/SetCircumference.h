@@ -17,6 +17,8 @@ class SetCircumference: public State
 		void entryAction();
 		void exitAction();
 		State* accept(StateEvent ev);
+
+		int tireCircumCM;
 };
 
 #endif /* SETCIRCUMFERENCE_H_ */
