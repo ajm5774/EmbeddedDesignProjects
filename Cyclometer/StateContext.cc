@@ -7,6 +7,7 @@
 
 #include "StateContext.h"
 #include <iostream>
+#include "SetUnit.h"
 
 /*
  * StateContext constructor
@@ -14,6 +15,8 @@
 StateContext::StateContext()
 {
 	hasEvent = false;
+	State * startState = new SetUnit();
+	currentStates[0] = startState;
 }
 
 /*
@@ -38,9 +41,12 @@ void StateContext::accept(StateEvent event)
 	for(i=0; i < currStateLen;i++)
 	{
 		transitionedState = currentStates[i]->accept(event);
-		currentStates[i]->exitAction();
-		currentStates[i] = transitionedState;
-		currentStates[i]->entryAction();
+		if(transitionedState != currentStates[i])
+		{
+			currentStates[i]->exitAction();
+			currentStates[i] = transitionedState;
+			currentStates[i]->entryAction();
+		}
 	}
 }
 
@@ -50,6 +56,7 @@ void StateContext::run()
 	QueueItem * nextItem;
 	State * transitionedState;
 
+	currentStates[0]->entryAction();
 	while(true)
 	{
 		pthread_sleepon_lock();

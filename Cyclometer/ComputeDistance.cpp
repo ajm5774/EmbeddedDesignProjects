@@ -24,4 +24,6 @@ State* ComputeDistance::accept(StateEvent ev)
 	{
 		return new SetCircumference();
 	}
+
+	return this;
 }

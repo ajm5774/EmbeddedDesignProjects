@@ -9,6 +9,9 @@
 #define COMPUTEDISTANCE_H_
 
 #include "State.h"
+#include "Cyclometer.h"
+#include "TimeElapsed.h"
+#include "SetCircumference.h"
 
 class ComputeDistance: public State
 {

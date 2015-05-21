@@ -8,6 +8,7 @@
 #include <sys/syspage.h>
 #include <assert.h>
 #include "timer.h"
+#include <sched.h>
 
 void CreateInterrupt(Interrupt *ret, long periodMicros, long sec)
 {
@@ -35,7 +36,7 @@ void CreateInterrupt(Interrupt *ret, long periodMicros, long sec)
 	event.sigev_notify = SIGEV_PULSE;		// most basic message we can send -- just a pulse number
 	event.sigev_coid = ConnectAttach ( ND_LOCAL_NODE, 0, chid, 0, 0 );  // Get ID that allows me to communicate on the channel
 	assert ( event.sigev_coid != -1 );		// stop with error if cannot attach to channel
-	event.sigev_priority = getprio(0);
+	//event.sigev_priority = getprio(0);
 	event.sigev_code = 1023;				// arbitrary number assigned to this pulse
 	event.sigev_value.sival_ptr = (void*)0;		// ?? TBD
 

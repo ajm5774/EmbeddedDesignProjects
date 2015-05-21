@@ -22,7 +22,7 @@ public:
 
 	//====inherited
 	//variables
-	StateContext * context;
+	StateContext * context[];
 
 	//functions
 	CalculationControl();
@@ -34,17 +34,19 @@ public:
 	clock_t timeLastCalc;
 	float millisSinceLastCalc;
 	clock_t startTime;
-	float elapsedMillis;
-	float currentSpeed;
-	float averageSpeed;
-	float distanceKM;
+
 	float distanceLastCalcKM;
 	int wheelCircumCM;
-	Mode unitMode;
+
 	pthread_mutex_t calcLock;
-	int numRots; //needs lock
-	bool bPerformCalcs; //needs lock
-	float kmhToMph
+	static Mode unitMode;
+	static int numRots; //needs lock
+	static bool bPerformCalcs; //needs lock
+	static float kmhToMph;
+	static float elapsedMillis;
+	static float currentSpeed;
+	static float averageSpeed;
+	static float distanceKM;
 
 private:
 	Interrupt timer;

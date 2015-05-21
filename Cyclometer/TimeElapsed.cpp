@@ -20,4 +20,5 @@ State* TimeElapsed::accept(StateEvent ev)
 	{
 		return new ComputeSpeed();
 	}
+	return this;
 }

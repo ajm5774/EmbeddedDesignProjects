@@ -25,6 +25,7 @@ void LEDDisplayControl::run()
 	while(true)
 	{
 		MsgReceive(timer.chid, &pulse, sizeof(pulse), NULL);
+		SetDisplayVals();
 		Control::OUTPUTB = ConvertIntToDisplay(segValues[segment]);
 
 		if(segment == 0)
@@ -48,46 +49,36 @@ void LEDDisplayControl::SetDisplayVals()
 {
 	if(displayMode == SPEED)
 	{
-		SetDisplayDigits(calcControl->currentSpeed, 2, 0);
-		SetDisplayDigits(calcControl->averageSpeed, 2, 2);
+		SetDisplayDigits(CalculationControl::currentSpeed, 2, 0);
+		SetDisplayDigits(CalculationControl::averageSpeed, 2, 2);
 	}
 	else if(displayMode == DISTANCE)
 	{
-		if(calcControl->unitMode == KMH)
-			SetDisplayDigits(calcControl->distanceKM, 4, 0);
+		if(CalculationControl::unitMode == KPH)
+			SetDisplayDigits(CalculationControl::distanceKM, 4, 0);
 		else
-			SetDisplayDigits(calcControl->distanceKM * kmhToMph, 4, 0);
+			SetDisplayDigits(CalculationControl::distanceKM * CalculationControl::kmhToMph, 4, 0);
 	}
 	else if(displayMode == ELAPSED_TIME)
 	{
-		int seconds = calcControl->elapsedMillis/1000 % 60;
-		int minutes = calcControl->elapsedMillis/1000/60;
+		int seconds = ((int)(CalculationControl::elapsedMillis/1000)) % 60;
+		int minutes = CalculationControl::elapsedMillis/1000/60;
 
 		SetDisplayDigits(seconds, 2, 0);
 		SetDisplayDigits(minutes, 2, 2);
 	}
-
-	//moved this to the states
-	/*else if(displayMode == SELECT_UNITS)
-	{
-		SetDisplayDigits((int)(calcControl->unitMode), 4, 0);
-	}
-	else if(displayMode == SELECT_TIRE_SIZE)
-	{
-		SetDisplayDigits(wheelCircumCM, 4, 0);
-	}*/
 }
 
 void LEDDisplayControl::SetDisplayDigits(float val, int numDigits, int startIndex)
 {
-	if(val < pow(10, numDigits))
+	if(val < power(10.0, (double)numDigits))
 	{
-		segValues[startIndex] = int(val*10) - int(val) * 10;
+		segValues[NUMSEGS - startIndex - 1] = int(val*10) - int(val) * 10;
 		SetDisplayDigits(int(val), numDigits, startIndex + 1);
 	}
 	else
 	{
-		SetDisplayDigits(int(val), numDigits, )
+		SetDisplayDigits(int(val), numDigits, startIndex);
 	}
 }
 
@@ -103,11 +94,22 @@ void LEDDisplayControl::SetDisplayDigits(int val, int numDigits, int startIndex)
 	int divisor = 1;
 	for(i = 0; i < numDigits; i++)
 	{
-		segValues[i + startIndex] = val % (divisor*10)/divisor;
+		segValues[NUMSEGS - 1 - (i + startIndex)] = val % (divisor*10)/divisor;
 		divisor *= 10;
 	}
 }
 
+double LEDDisplayControl::power(double num, double power)
+{
+	double ret = num;
+	int i;
+	for(i = 0; i < power; i++)
+	{
+		ret *= num;
+	}
+
+	return ret;
+}
 
 
 uint8_t LEDDisplayControl::ConvertIntToDisplay(uint8_t digit)

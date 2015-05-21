@@ -7,7 +7,7 @@ SetCircumference::SetCircumference() : State()
 void SetCircumference::entryAction()
 {
 	ledDisplayControl->displayMode = SELECT_TIRE_SIZE;
-	ledDisplayControl->ledSetDisplayDigits(tireCircumCM, 4, 0);
+	ledDisplayControl->SetDisplayDigits(tireCircumCM, 4, 0);
 }
 
 void SetCircumference::exitAction()
@@ -30,7 +30,8 @@ State* SetCircumference::accept(StateEvent ev)
 		if(tireCircumCM > 220)//220 is max size
 			tireCircumCM = 190;//minimum is 190
 
-		ledDisplayControl->ledSetDisplayDigits(tireCircumCM, 4, 0);
+		ledDisplayControl->SetDisplayDigits(tireCircumCM, 4, 0);
 		return this;	
 	}
+	return this;
 }

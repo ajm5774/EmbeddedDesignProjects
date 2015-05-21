@@ -15,9 +15,9 @@
 #include "Timer.h"
 #include "Modes.h"
 #include <math.h>
+#include "Cyclometer.h"
 
 #define NUMSEGS 4
-
 
 
 class LEDDisplayControl: public Control
@@ -38,6 +38,12 @@ public:
 	static uint8_t segValues[];
 	static bool showDP[];
 	Mode displayMode;
+
+	void SetDisplayVals();
+	void SetDisplayDigits(float val, int numDigits, int startIndex);
+	void SetDisplayDigits(int val, int numDigits, int startIndex);
+
+	double power(double num, double power);
 
 private:
 	Interrupt timer;

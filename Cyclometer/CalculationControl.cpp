@@ -1,5 +1,14 @@
 #include "CalculationControl.h"
 
+
+int CalculationControl::numRots = 0; //needs lock
+bool CalculationControl::bPerformCalcs = false; //needs lock
+float CalculationControl::kmhToMph = .621371;
+float CalculationControl::elapsedMillis = 0.0;
+float CalculationControl::currentSpeed = 0.0;
+float CalculationControl::averageSpeed = 0.0;
+float CalculationControl::distanceKM = 3;
+Mode CalculationControl::unitMode = MPH;
 CalculationControl::CalculationControl()
 {
 
@@ -8,9 +17,7 @@ CalculationControl::CalculationControl()
 CalculationControl::CalculationControl(StateContext * context)
 {
 	reInit();
-	unitMode = 			MPH;
-	bPerformCalcs = 	false;
-	kmhToMph=			.621371;
+	CreateInterrupt(&timer, 500000, 0);//5 times a second
 	pthread_mutex_init(&calcLock, NULL);
 }
 

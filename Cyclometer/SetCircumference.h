@@ -9,6 +9,8 @@
 #define SETCIRCUMFERENCE_H_
 
 #include "State.h"
+#include "Cyclometer.h"
+#include "ComputeSpeed.h"
 
 class SetCircumference: public State
 {

@@ -17,8 +17,9 @@
 #include <vector>
 #include <sys/neutrino.h>
 
+
 class StateContext {
-	State * currentStates[];
+	State * currentStates[1];
 	bool hasEvent;
 
 public:

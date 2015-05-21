@@ -9,6 +9,8 @@
 #define TIMEELAPSED_H_
 
 #include "State.h"
+#include "computeSpeed.h"
+#include "Cyclometer.h"
 
 class TimeElapsed: public State
 {

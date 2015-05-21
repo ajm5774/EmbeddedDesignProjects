@@ -12,6 +12,9 @@
 #include "StateEvents.h"
 #include "StateContext.h"
 #include "Modes.h"
+#include "Cyclometer.h"
+#include "SetCircumference.h"
+#include "LEDControl.h"
 
 class SetUnit: public State
 {

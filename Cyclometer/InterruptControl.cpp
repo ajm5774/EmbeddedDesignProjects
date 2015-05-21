@@ -125,7 +125,8 @@ void InterruptControl::run()
 					modeHeldWaitCount = 0;
 				}
 			}
-			else if(waitCount * waitTimeMicros >= 200000)//.2sec
+			else if(waitCount * waitTimeMicros >= 200000 &&
+					waitCount * waitTimeMicros < 400000)//.2sec
 				context->queueEvent(mode_pressed);
 			waitCount++;
 		}

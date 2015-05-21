@@ -1,3 +1,4 @@
+
 #include <cstdlib>
 #include <stdio.h>
 #include <iostream>
@@ -9,22 +10,21 @@
 #include "StateEvents.h"
 #include "Control.h"
 #include "StateContext.h"
-#include "LEDDisplayControl.h"
-#include "LEDControl.h"
-#include "InterruptControl.h"
-#include "CalculationControl.h"
+
 #include <unistd.h>
 #include <sys/neutrino.h>
 #include <sys/mman.h>
+#include "Cyclometer.h"
 
 const int numThreads = 4;
 pthread_t * threads[numThreads];
 StateContext * context;
 
-CalculationControl * calcControl;
-LEDDisplayControl * ledDisplayControl;
-InterruptControl * intControl;
-LEDControl * ledControl;
+
+CalculationControl * calcControl = 0;
+InterruptControl * intControl = 0;
+LEDControl * ledControl = 0;
+LEDDisplayControl * ledDisplayControl = 0;
 
 typedef struct
 {

@@ -20,4 +20,5 @@ State* ComputeSpeed::accept(StateEvent ev)
 	{
 		return new ComputeDistance();
 	}
+	return this;
 }

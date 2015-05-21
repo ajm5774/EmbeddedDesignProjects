@@ -2,11 +2,12 @@
 
 SetUnit::SetUnit() : State()
 {
-	unitMode = KMH;
+	unitMode = KPH;
 }
 void SetUnit::entryAction()
 {
 	ledDisplayControl->displayMode = SELECT_UNITS;
+	ledDisplayControl->SetDisplayDigits((int)unitMode, 4, 0);
 }
 
 void SetUnit::exitAction()
@@ -24,13 +25,13 @@ State* SetUnit::accept(StateEvent ev)
 	}
 	else if(ev == mode_pressed)
 	{
-		if(unitMode == KMH)
+		if(unitMode == KPH)
 			unitMode = MPH;
 		else
-			unitMode = KMH;
+			unitMode = KPH;
 
-		ledDisplayControl->ledSetDisplayDigits((int)unitMode, 4, 0);
+		ledDisplayControl->SetDisplayDigits((int)unitMode, 4, 0);
 		return this;	
 	}
-
+	return this;
 }

@@ -9,6 +9,9 @@
 #define COMPUTESPEED_H_
 
 #include "State.h"
+#include "Modes.h"
+#include "ComputeDistance.h"
+#include "Cyclometer.h"
 
 class ComputeSpeed: public State
 {
