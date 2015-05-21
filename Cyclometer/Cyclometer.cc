@@ -15,6 +15,10 @@
 #include <sys/neutrino.h>
 #include <sys/mman.h>
 #include "Cyclometer.h"
+#include "LEDControl.h"
+#include "InterruptControl.h"
+#include "CalculationControl.h"
+
 
 const int numThreads = 4;
 pthread_t * threads[numThreads];
@@ -90,17 +94,24 @@ void IOInit()
 	if ( Control::outputBHandle == MAP_DEVICE_FAILED ) {
 		perror( "output B map failed" );
 	}
-	if ( Control::interCtrlHandle == MAP_DEVICE_FAILED ) {
-		perror( "interrupt control map failed" );
-	}
-	if ( Control::clearHandle == MAP_DEVICE_FAILED ) {
-		perror( "interrupt clear map failed" );
-	}
 
 	//set IO direction
 	out8(Control::ctrlHandle, CTRL_INIT);
 
 
+}
+
+LEDDisplayControl * getLDC(){
+	return ledDisplayControl;
+}
+
+CalculationControl * getCalcC(){
+	return calcControl;
+}
+
+void resetSystem(){
+	//context->reInit();
+	calcControl->reInit();
 }
 
 int main(int argc, char *argv[]) {

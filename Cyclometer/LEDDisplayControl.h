@@ -10,12 +10,10 @@
 
 #include "StateContext.h"
 #include "Control.h"
-#include <stdio.h>
-#include <unistd.h>
 #include "Timer.h"
 #include "Modes.h"
-#include <math.h>
-#include "Cyclometer.h"
+#include <stdio.h>
+using namespace std;
 
 #define NUMSEGS 4
 
@@ -47,7 +45,7 @@ public:
 
 private:
 	Interrupt timer;
-	uint8_t ConvertIntToDisplay(uint8_t digit);
+	uint8_t ConvertIntToDisplay(uint8_t digit, bool dp);
 };
 
 #endif /* LEDDISPLAYCONTROL_H_ */

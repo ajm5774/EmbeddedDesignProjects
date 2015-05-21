@@ -1,14 +1,5 @@
 #include "CalculationControl.h"
 
-
-int CalculationControl::numRots = 0; //needs lock
-bool CalculationControl::bPerformCalcs = false; //needs lock
-float CalculationControl::kmhToMph = .621371;
-float CalculationControl::elapsedMillis = 0.0;
-float CalculationControl::currentSpeed = 0.0;
-float CalculationControl::averageSpeed = 0.0;
-float CalculationControl::distanceKM = 3;
-Mode CalculationControl::unitMode = MPH;
 CalculationControl::CalculationControl()
 {
 
@@ -16,9 +7,13 @@ CalculationControl::CalculationControl()
 
 CalculationControl::CalculationControl(StateContext * context)
 {
+	kmhToMph = .621371;
+	secToHour = 3600;
 	reInit();
-	CreateInterrupt(&timer, 500000, 0);//5 times a second
-	pthread_mutex_init(&calcLock, NULL);
+	timerMicros = 1000000;
+	bPerformCalcs = false; //needs lock
+	CreateInterrupt(&timer, 0, 1);//5 times a second
+	pthread_mutex_init(&numRotsLock, NULL);
 }
 
 void CalculationControl::run()
@@ -40,7 +35,7 @@ void CalculationControl::calcCurrentSpeed(){
 	if(unitMode == MPH)
 		distance *= .621371;//convert from km to miles
 
-	currentSpeed = distance/millisSinceLastCalc*1000;
+	currentSpeed = (float)distance*1000.0 * (float)secToHour/(timerMicros/1000.0);
 }
 
 void CalculationControl::calcAverageSpeed(){
@@ -48,7 +43,7 @@ void CalculationControl::calcAverageSpeed(){
 	if(unitMode == MPH)
 		distance *= .621371;//convert from km to miles
 
-	averageSpeed = distance/elapsedMillis*1000;
+	averageSpeed = (float)(distance*1000.0 * (float)secToHour/elapsedMillis);
 }
 
 void CalculationControl::calcDistance(){
@@ -56,35 +51,30 @@ void CalculationControl::calcDistance(){
 }
 
 void CalculationControl::calcDistanceLastCalc(){
-	distanceLastCalcKM = (wheelCircumCM * numRots)/100000;
-	numRots = 0;
+	distanceLastCalcKM = ((float)(wheelCircumCM * numRots))/100000.0;
+	addNumRots(-numRots);
 }
 
 void CalculationControl::performCalcs(){
 	//get times
-	currentTime = clock();
-	millisSinceLastCalc = getMilliDiff(currentTime, timeLastCalc);
-	elapsedMillis = getMilliDiff(currentTime, startTime);
+	elapsedMillis += timerMicros /1000;
+	printf("%f\n", elapsedMillis);
 
 	calcDistanceLastCalc();//this calc must come first
 	calcDistance();
 	calcCurrentSpeed();
 	calcAverageSpeed();
-	calcDistance();
-	timeLastCalc = clock();
 }
 
-float CalculationControl::getMilliDiff(clock_t bigClock, clock_t smallClock)
+void CalculationControl::addNumRots(int val)
 {
-	return (float)(1000.0 * (bigClock-smallClock) / CLOCKS_PER_SEC);
+	pthread_mutex_lock(&numRotsLock);
+	numRots+= val;
+	pthread_mutex_unlock(&numRotsLock);
 }
 
 void CalculationControl::reInit(){
-	currentTime = 		clock();
-	startTime = 		clock();
-	timeLastCalc = 		clock();
-	elapsedMillis = 	0.0;
-	millisSinceLastCalc = 0.0;
+	elapsedMillis =		0.0;
 
 	currentSpeed = 		0.0;
 	averageSpeed = 		0.0;
@@ -92,4 +82,6 @@ void CalculationControl::reInit(){
 	distanceLastCalcKM= 0.0;
 	wheelCircumCM = 	190;
 	numRots = 			0;
+	//bPerformCalcs = false; //needs lock
+	unitMode = MPH;
 }

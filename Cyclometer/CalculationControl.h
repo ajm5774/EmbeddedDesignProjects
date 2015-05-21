@@ -30,26 +30,32 @@ public:
 	virtual void run();
 
 	//====other
-	clock_t currentTime;
-	clock_t timeLastCalc;
-	float millisSinceLastCalc;
-	clock_t startTime;
+	//clock_t currentTime;
+	//clock_t timeLastCalc;
+	//float millisSinceLastCalc;
+	//clock_t startTime;
 
 	float distanceLastCalcKM;
-	int wheelCircumCM;
 
-	pthread_mutex_t calcLock;
-	static Mode unitMode;
-	static int numRots; //needs lock
-	static bool bPerformCalcs; //needs lock
-	static float kmhToMph;
-	static float elapsedMillis;
-	static float currentSpeed;
-	static float averageSpeed;
-	static float distanceKM;
+
+	pthread_mutex_t numRotsLock;
+	int wheelCircumCM;
+	Mode unitMode;
+	int numRots; //needs lock
+	bool bPerformCalcs; //needs lock
+	float kmhToMph;
+	int secToHour;
+	float elapsedMillis;
+	float currentSpeed;
+	float averageSpeed;
+	float distanceKM;
+
+	void addNumRots(int val);
+	void reInit();
 
 private:
 	Interrupt timer;
+	int timerMicros;
 
 	//functions
 	void calcCurrentSpeed();
@@ -58,7 +64,6 @@ private:
 	void calcDistanceLastCalc();
 	void performCalcs();
 	float getMilliDiff(clock_t bigClock, clock_t smallClock);
-	void reInit();
 
 };
 

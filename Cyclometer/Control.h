@@ -63,15 +63,6 @@
 #define BOTTON2_PIN_MASK 	0x02
 #define BOTTON3_PIN_MASK 	0x04
 
-//interrupt clear
-#define DAQ_CLEAR  			DAQ_BASE + 0
-#define CLEAR          		0x02
-#define DIO_IRQ        		0x05
-
-//interrupt control
-#define DAQ_INTER_CTRL  	DAQ_BASE + 4
-#define INIT_BIT       		0x02
-
 //IO CTRL
 #define DAQ_CTRL 			DAQ_BASE+11
 #define CTRL_INIT 			0x09
@@ -88,8 +79,6 @@ public:
 	static uintptr_t outputAHandle;
 	static uintptr_t outputBHandle;
 	static uintptr_t ctrlHandle;
-	static uintptr_t interCtrlHandle;
-	static uintptr_t clearHandle;
 	virtual void run();
 };
 

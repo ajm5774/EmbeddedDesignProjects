@@ -6,7 +6,7 @@ ComputeDistance::ComputeDistance() : State()
 }
 void ComputeDistance::entryAction()
 {
-	ledDisplayControl->displayMode = DISTANCE;
+	getLDC()->displayMode = DISTANCE;
 }
 
 void ComputeDistance::exitAction()

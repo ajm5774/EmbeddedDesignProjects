@@ -18,6 +18,7 @@
 #include <sys/neutrino.h>
 
 
+
 class StateContext {
 	State * currentStates[1];
 	bool hasEvent;
@@ -27,6 +28,7 @@ public:
 	void queueEvent(StateEvent event);
 	void accept(StateEvent event);
 	void run();
+	void reInit();
 
 private:
 	ConcurrentQueue queue;

@@ -8,6 +8,7 @@
 #include "StateContext.h"
 #include <iostream>
 #include "SetUnit.h"
+#include "Cyclometer.h"
 
 /*
  * StateContext constructor
@@ -35,6 +36,12 @@ void StateContext::queueEvent(StateEvent event)
 
 void StateContext::accept(StateEvent event)
 {
+	if(event == reset)
+	{
+		resetSystem();
+		return;
+	}
+
 	int i;
 	State * transitionedState;
 	int currStateLen = (sizeof(currentStates)/sizeof(State*));
@@ -74,6 +81,14 @@ void StateContext::run()
 			hasEvent = false;
 		pthread_sleepon_unlock();
 	}
+}
+
+void StateContext::reInit()
+{
+	State start = SetUnit();
+	currentStates[0] = &start;
+	queue = ConcurrentQueue();
+	currentStates[0]->entryAction();
 }
 
 

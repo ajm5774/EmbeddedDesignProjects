@@ -6,7 +6,7 @@ ComputeSpeed::ComputeSpeed() : State()
 }
 void ComputeSpeed::entryAction()
 {
-	ledDisplayControl->displayMode = SPEED;
+	getLDC()->displayMode = SPEED;
 }
 
 void ComputeSpeed::exitAction()

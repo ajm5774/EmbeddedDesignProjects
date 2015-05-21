@@ -12,12 +12,24 @@
 #include "StateEvents.h"
 #include "Control.h"
 #include "LEDControl.h"
+#include "CalculationControl.h"
+#include "Cyclometer.h"
 #include "Timer.h"
 #include <stdio.h>
 #include <sys/neutrino.h>
+#include <sys/mman.h>
 #include <hw/inout.h>
 
+#define DAQ_BASE 0x280
 
+//interrupt clear
+#define DAQ_CLEAR  			DAQ_BASE + 0
+#define CLEAR          		0x02
+#define DIO_IRQ        		0x05
+
+//interrupt control
+#define DAQ_INTER_CTRL  	DAQ_BASE + 4
+#define INIT_BIT       		0x02
 
 const struct sigevent * interruptReceived(void *arg, int id);
 
@@ -41,6 +53,8 @@ public:
 
 	//variables
 	StateEvent event;
+	static uintptr_t interCtrlHandle;
+	static uintptr_t clearHandle;
 
 private:
 	Interrupt timer;
@@ -55,6 +69,7 @@ private:
 	bool awaitingResetVals;
 	int waitCount;
 	int modeHeldWaitCount;
+	bool b3Triggered;
 
 	bool isButton1Pressed(uint8_t input);
 	bool isButton2Pressed(uint8_t input);

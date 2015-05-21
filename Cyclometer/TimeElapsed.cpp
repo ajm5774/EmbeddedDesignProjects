@@ -6,7 +6,7 @@ TimeElapsed::TimeElapsed() : State()
 }
 void TimeElapsed::entryAction()
 {
-	ledDisplayControl->displayMode = ELAPSED_TIME;
+	getLDC()->displayMode = ELAPSED_TIME;
 }
 
 void TimeElapsed::exitAction()

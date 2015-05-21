@@ -1,6 +1,9 @@
 
 #include "InterruptControl.h"
 
+uintptr_t InterruptControl::interCtrlHandle = mmap_device_io( PORT_LENGTH, DAQ_INTER_CTRL );
+uintptr_t InterruptControl::clearHandle = mmap_device_io(PORT_LENGTH, DAQ_CLEAR);
+
 InterruptControl::InterruptControl(): Control()
 {
 	printf("InterruptControl made");
@@ -13,19 +16,34 @@ InterruptControl::InterruptControl(StateContext * aContext): Control(aContext)
 	waitTimeMicros = 200000;
 	CreateInterrupt(&timer, waitTimeMicros, 0);//5 times a second
 
-	out8( interCtrlHandle, INIT_BIT );
-	out8( clearHandle, CLEAR );
+	int privity_err;
+	privity_err = ThreadCtl( _NTO_TCTL_IO, NULL );
+	if ( privity_err == -1)
+	{
+		printf( "Can't get root permissions\n");
+	}
+
+	if (interCtrlHandle == MAP_DEVICE_FAILED ) {
+		perror( "interrupt control map failed" );
+	}
+	if (clearHandle == MAP_DEVICE_FAILED ) {
+		perror( "interrupt clear map failed" );
+	}
 
 	_pulseHist = 0;
 	awaitingReset = false;
 	awaitingResetVals = false;
 	waitCount = 0;
 	modeHeldWaitCount = 0;
+	b3Triggered = false;
 
 }
 
 void InterruptControl::run()
 {
+	out8( interCtrlHandle, INIT_BIT );
+	out8( clearHandle, CLEAR );
+
 	_interruptID = InterruptAttach(DIO_IRQ, interruptReceived, this, sizeof(this), 0);
 	if (_interruptID == -1) {
 		fprintf(stderr, "can't attach to IRQ %d\n", DIO_IRQ);
@@ -50,6 +68,11 @@ void InterruptControl::run()
 		if (_pulseCount != _pulseHist)
 		{
 			_pulseHist = _pulseCount;
+			if(getCalcC()->bPerformCalcs)
+			{
+				getCalcC()->addNumRots(_pulseCount);
+			}
+			context->queueEvent(wheel_rotated);
 		}
 		_pulseCount = 0;
 
@@ -126,8 +149,11 @@ void InterruptControl::run()
 				}
 			}
 			else if(waitCount * waitTimeMicros >= 200000 &&
-					waitCount * waitTimeMicros < 400000)//.2sec
+					!b3Triggered)//.2sec
+			{
 				context->queueEvent(mode_pressed);
+				b3Triggered = true;
+			}
 			waitCount++;
 		}
 		else
@@ -150,6 +176,7 @@ void InterruptControl::run()
 			awaitingResetVals = false;
 			waitCount = 0;
 			modeHeldWaitCount = 0;
+			b3Triggered = false;
 		}
 
 
@@ -204,6 +231,6 @@ void InterruptControl::updateCount()
 const struct sigevent * interruptReceived(void *arg, int id)
 {
 	((InterruptControl *)arg)->updateCount();
-	out8( Control::clearHandle, CLEAR );
+	out8(InterruptControl::clearHandle, CLEAR );
 	return NULL;
 }

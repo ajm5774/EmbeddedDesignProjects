@@ -1,12 +1,14 @@
 
 #include "LEDDisplayControl.h"
+#include "CalculationControl.h"
+#include "Cyclometer.h"
 
 uint8_t LEDDisplayControl::segValues[] = {4,5,6,7};
-bool showDP[] = {false,false,false,false};
+bool LEDDisplayControl::showDP[] = {false,false,false,false};
 
 LEDDisplayControl::LEDDisplayControl(): Control()
 {
-	printf("LEDDisplayControl made");
+	//printf("LEDDisplayControl made");
 }
 
 LEDDisplayControl::LEDDisplayControl(StateContext * aContext): Control(aContext)
@@ -26,7 +28,7 @@ void LEDDisplayControl::run()
 	{
 		MsgReceive(timer.chid, &pulse, sizeof(pulse), NULL);
 		SetDisplayVals();
-		Control::OUTPUTB = ConvertIntToDisplay(segValues[segment]);
+		Control::OUTPUTB = ConvertIntToDisplay(segValues[segment], showDP[segment]);
 
 		if(segment == 0)
 			Control::OUTPUTA = (Control::OUTPUTA  & 0x10) | ANODE1_PIN_MASK;
@@ -49,35 +51,49 @@ void LEDDisplayControl::SetDisplayVals()
 {
 	if(displayMode == SPEED)
 	{
-		SetDisplayDigits(CalculationControl::currentSpeed, 2, 0);
-		SetDisplayDigits(CalculationControl::averageSpeed, 2, 2);
+		SetDisplayDigits(getCalcC()->currentSpeed, 2, 0);
+		SetDisplayDigits(getCalcC()->averageSpeed, 2, 2);
 	}
 	else if(displayMode == DISTANCE)
 	{
-		if(CalculationControl::unitMode == KPH)
-			SetDisplayDigits(CalculationControl::distanceKM, 4, 0);
+		if(getCalcC()->unitMode == KPH)
+			SetDisplayDigits(getCalcC()->distanceKM, 4, 0);
 		else
-			SetDisplayDigits(CalculationControl::distanceKM * CalculationControl::kmhToMph, 4, 0);
+			SetDisplayDigits(getCalcC()->distanceKM * getCalcC()->kmhToMph, 4, 0);
 	}
 	else if(displayMode == ELAPSED_TIME)
 	{
-		int seconds = ((int)(CalculationControl::elapsedMillis/1000)) % 60;
-		int minutes = CalculationControl::elapsedMillis/1000/60;
+		int seconds = ((int)(getCalcC()->elapsedMillis/1000)) % 60;
+		int minutes = getCalcC()->elapsedMillis/1000/60;
+
+		showDP[1] = true;
 
 		SetDisplayDigits(seconds, 2, 0);
 		SetDisplayDigits(minutes, 2, 2);
 	}
+	else
+	{
+		showDP[0] = false;
+		showDP[1] = false;
+		showDP[2] = false;
+		showDP[3] = false;
+	}
+
+
 }
 
 void LEDDisplayControl::SetDisplayDigits(float val, int numDigits, int startIndex)
 {
-	if(val < power(10.0, (double)numDigits))
+
+	if(val < power(10.0, (double)numDigits-1))
 	{
+		showDP[NUMSEGS - startIndex-2] = true;
 		segValues[NUMSEGS - startIndex - 1] = int(val*10) - int(val) * 10;
 		SetDisplayDigits(int(val), numDigits, startIndex + 1);
 	}
 	else
 	{
+		showDP[NUMSEGS - startIndex-2] = false;
 		SetDisplayDigits(int(val), numDigits, startIndex);
 	}
 }
@@ -101,7 +117,7 @@ void LEDDisplayControl::SetDisplayDigits(int val, int numDigits, int startIndex)
 
 double LEDDisplayControl::power(double num, double power)
 {
-	double ret = num;
+	double ret = 1;
 	int i;
 	for(i = 0; i < power; i++)
 	{
@@ -112,40 +128,43 @@ double LEDDisplayControl::power(double num, double power)
 }
 
 
-uint8_t LEDDisplayControl::ConvertIntToDisplay(uint8_t digit)
+uint8_t LEDDisplayControl::ConvertIntToDisplay(uint8_t digit, bool dp)
 {
+	uint8_t ret = 0;
 	switch(digit)
 	{
 		case 0:
-			return 0b11000000;
+			ret = 0b11000000;
 			break;
 		case 1:
-			return 0b11111001;
+			ret =  0b11111001;
 			break;
 		case 2:
-			return 0b10100100;
+			ret =  0b10100100;
 			break;
 		case 3:
-			return 0b10110000;
+			ret =  0b10110000;
 			break;
 		case 4:
-			return 0b10011001;
+			ret =  0b10011001;
 			break;
 		case 5:
-			return 0b10010010;
+			ret =  0b10010010;
 			break;
 		case 6:
-			return 0b10000010;
+			ret =  0b10000010;
 			break;
 		case 7:
-			return 0b11111000;
+			ret =  0b11111000;
 			break;
 		case 8:
-			return 0b10000000;
+			ret =  0b10000000;
 			break;
 		case 9:
-			return 0b10010000;
+			ret =  0b10010000;
 			break;
 	}
-	return digit;
+	if(dp)
+		ret = ret & 0b01111111;
+	return ret;
 }

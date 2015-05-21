@@ -6,8 +6,8 @@ SetUnit::SetUnit() : State()
 }
 void SetUnit::entryAction()
 {
-	ledDisplayControl->displayMode = SELECT_UNITS;
-	ledDisplayControl->SetDisplayDigits((int)unitMode, 4, 0);
+	getLDC()->displayMode = SELECT_UNITS;
+	getLDC()->SetDisplayDigits((int)unitMode, 4, 0);
 }
 
 void SetUnit::exitAction()
@@ -19,7 +19,7 @@ State* SetUnit::accept(StateEvent ev)
 {
 	if(ev == set_pressed)
 	{
-		calcControl->unitMode = unitMode;
+		getCalcC()->unitMode = unitMode;
 		LEDControl::unitMode = unitMode;
 		return new SetCircumference();
 	}
@@ -30,7 +30,7 @@ State* SetUnit::accept(StateEvent ev)
 		else
 			unitMode = KPH;
 
-		ledDisplayControl->SetDisplayDigits((int)unitMode, 4, 0);
+		getLDC()->SetDisplayDigits((int)unitMode, 4, 0);
 		return this;	
 	}
 	return this;
